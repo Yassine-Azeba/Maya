@@ -26,3 +26,26 @@ add drizzle adapter:
 - npm install @auth/core
 - npm install postgres
 - add adapter in nextauth.ts
+
+
+Top level container : Space
+    Classification : object
+        work unit : echo
+
+Description :
+Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
+🟢
+
+| 🔴 | Nest    | When deleted all related branches are deleted   | 
+| 🔴 | Nest    | When deleted all related Leafs are deleted      | 
+| 🔴 | Branch  | Is top level or not                             | 
+| 🔴 | Branch  | Must belong to exactly one Nest                 |                 
+| 🔴 | Branch  | When deleted, all related Leafs are deleted     | 
+| 🔴 | Branch  | Parent Branch can't be from another Nest        | 
+| 🔴 | Leaf    | Must be linked to exactly one Branche           | 
+| 🔴 | Leaf    | Implicitly belongs to a Nest                    | 
+| 🔴 | Leaf    | Branche can't be from another Nest              | 
+| 🔴 | Leaf    | Parent Leaf can't be from another Nest          | 
+| 🔴 | Leaf    | Parent can't be the Leaf itself                 | 
+| 🔴 | Leaf    | When deleted, all child Leafs must be deleted   | 
+

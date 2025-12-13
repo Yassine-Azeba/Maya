@@ -7,7 +7,8 @@ const connectionString = process.env.DATABASE_URL!
 const pool = postgres(connectionString, { max: 1 })
  
 export const db = drizzle(pool)
- 
+
+// /!\ For Authentication (Don't touch)
 export const users = pgTable("user", {
 	id: text("id")
 		.primaryKey()
