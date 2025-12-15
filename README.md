@@ -1,3 +1,4 @@
+# Setup
 npx create-next-app@latest
 npx shadcn@latest init
 npm install next-themes
@@ -27,7 +28,7 @@ add drizzle adapter:
 - npm install postgres
 - add adapter in nextauth.ts
 
-
+# App description
 Top level container : Space
     Classification : object
         work unit : echo
@@ -35,7 +36,6 @@ Top level container : Space
 Description :
 Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
 🟢
-
 | 🔴 | Nest    | When deleted all related branches are deleted   | 
 | 🔴 | Nest    | When deleted all related Leafs are deleted      | 
 | 🔴 | Branch  | Is top level or not                             | 
@@ -49,3 +49,21 @@ Each Nest is configured with multiple nested Branches and contains Nodes linked 
 | 🔴 | Leaf    | Parent can't be the Leaf itself                 | 
 | 🔴 | Leaf    | When deleted, all child Leafs must be deleted   | 
 
+
+# Todo
+A continuer demain :
+- Création suppression Echo (Form, DeleteButton)
+- Implémenter contrainte :
+    - Assignation parent Objet
+        - pas dans un autre space
+        - pas fils de l'objet en lui même
+    - Assignation parent echo
+        - objet de l'echo parent appartient au space de l'objet de l'echo lui même
+        - objet de l'echo parent n'est pas fils de l'echo lui même
+
+
+Workflows :
+- Create Space
+- Create Objects
+    - If parent assign : check if parent object is in the same space
+    - If parent assign : check if parent object is not child or child of child.
