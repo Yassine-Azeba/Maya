@@ -28,6 +28,21 @@ add drizzle adapter:
 - npm install postgres
 - add adapter in nextauth.ts
 
+# Tools
+## Planning and Vizualization
+- Kanban
+- Gantt
+- Calendar
+- Dependencies
+## Clarity and Focus
+- Charts
+- Priorities
+- Risks
+- Dependencies
+## Collaboration & Communication (v2)
+- Assignements
+- Mentions
+
 # App description
 Top level container : Space | Plane
     Classification : object | Line
