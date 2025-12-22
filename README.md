@@ -29,9 +29,18 @@ add drizzle adapter:
 - add adapter in nextauth.ts
 
 # App description
-Top level container : Space
-    Classification : object
-        work unit : echo
+Top level container : Space | Plane
+    Classification : object | Line
+        work unit : echo    | Dot
+
+
+Plane : Project Management
+    Classification : Programms | Projects
+        Dots : NADIN (Programms) | CC Fleet (Programms) | E Invoicing (Projects) | WeFleet (Projects)
+        Classification : Streams (child of programms)
+            Dots : Contremarque (son of NADIN) | Invoicing (son of NADIN) | ...
+            Classification : Tasks
+                Dots : Task 1 (son of CC FLeet) | ...
 
 Description :
 Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
@@ -67,3 +76,26 @@ Workflows :
 - Create Objects
     - If parent assign : check if parent object is in the same space
     - If parent assign : check if parent object is not child or child of child.
+
+
+
+Tests :
+"use client"
+import { toast } from "sonner"
+import { Button } from "../ui/button"
+import { UpdatePlane } from "@/data/planes"
+
+interface UpdatePlaneButtonProps {
+    planeId : string
+}
+export default function UpdatePlaneButton({planeId}:UpdatePlaneButtonProps){
+    return(
+        <Button variant={"outline"} size={"sm"} onClick={() => {
+            toast.promise(UpdatePlane({planeId:planeId,description: "Description"}),{
+                loading: "Updating Plane ...",
+                success: (data) => `${data.message}`,
+                error: "Something wrong happened ..."
+            })
+        }}>Update</Button>
+    )
+}

@@ -1,9 +1,10 @@
 import "./globals.css"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
 import { getSession } from "@/lib/nextauth"
+import { Toaster } from "@/components/ui/sonner"
+import { Geist, Geist_Mono } from "next/font/google"
 import AuthProvider from "@/components/auth-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 				<AuthProvider session={session}>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						{children}
+						<Toaster />
 					</ThemeProvider>
 				</AuthProvider>
 			</body>
