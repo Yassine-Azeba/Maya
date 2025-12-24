@@ -27,7 +27,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<AuthProvider session={session}>
-					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
 						{children}
 						<Toaster />
 					</ThemeProvider>

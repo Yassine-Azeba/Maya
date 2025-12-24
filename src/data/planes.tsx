@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { planes } from "@/db/planes"
 import { DrizzleQueryError } from "drizzle-orm"
+import { GetUser } from "./user"
 
 // ✅✅ Create
 interface CreatePlaneProps {
@@ -13,6 +14,11 @@ interface CreatePlaneProps {
 export async function CreatePlane({userId,name,description}:CreatePlaneProps) {
     if(!userId || !name) return {success: false, message: "Invalid inputs.", data: null}
     // Check if user exist
+    const user = await GetUser({userId:userId})
+    if(!user || user.success === false || !user.data) return {success: false, message: "Invalid user.", data: null}
+    const plane = await GetPlanes({userId:userId})
+    const filteredPlane = plane.data?.filter(plane => plane.name === name)
+    if(filteredPlane && filteredPlane.length > 0) return {success: false, message: "Plane already exist.", data: null}
     try{
         const result = await db.insert(planes).values({
             name: name,
@@ -51,6 +57,7 @@ export async function GetPlanes({planeId,name,userId}:GetPlanesProps) {
             const result = await db.select().from(planes).where(eq(planes.userId,userId))
             return {success: true, message: "Plane(s) successfully retrieved.", data: result}
         }
+        return {success: false, message: "Unexpected error occured.", data: null}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
             return {success: false, message: error.message, data: null}
