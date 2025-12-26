@@ -1,16 +1,13 @@
 "use client"
 import Link from "next/link"
-import { useState } from "react"
-import { Button } from "./ui/button"
 import { signOut } from "next-auth/react"
 import { useSession } from "next-auth/react"
-import CreatePlaneForm from "./form-create-plane"
+import CreatePlaneButton from "./button-plane-create"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import {Sidebar,SidebarContent,SidebarFooter,SidebarGroup,SidebarGroupContent,SidebarGroupLabel,SidebarHeader,SidebarMenu,SidebarMenuButton,SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar} from "@/components/ui/sidebar"
-import { BellDot, Calendar, Calendars, ChevronRight, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, EllipsisVertical, Focus, GanttChart, Handshake, Kanban, Layers, LayersPlus, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
+import { BellDot, Calendar, Calendars, ChevronRight, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, EllipsisVertical, Focus, GanttChart, Handshake, Kanban, Layers, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
 
 interface AppSideBarProps {
 	userId : string,
@@ -22,7 +19,6 @@ interface AppSideBarProps {
     }[] | null
 }
 export function AppSidebar({userId,planes}:AppSideBarProps) {
-	const [isDialogOpen, setDialogOpen] = useState(false)
 	const {data:session, status} = useSession()
 	const { isMobile } = useSidebar()
 	return (
@@ -42,7 +38,7 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
             </SidebarHeader>
 			{/* ✅Content : Planes & Tools */}
 			<SidebarContent>
-				{/* First : Create & Display Planes */}
+				{/* ✅ First : Create & Display Planes */}
 				<SidebarGroup>
 					<SidebarGroupContent className="flex flex-col gap-2">
 						<SidebarMenu>
@@ -58,23 +54,12 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<CollapsibleContent>
 										<SidebarMenuSub>
 											{planes?planes.map(plane => <SidebarMenuSubItem key={plane.planeId}>
-												<SidebarMenuSubButton className="text-sm text-muted-foreground">{plane.name}</SidebarMenuSubButton>
+													<SidebarMenuSubButton href={`/planes/${plane.name}`} className="text-sm text-muted-foreground">
+														{plane.name}
+													</SidebarMenuSubButton>
 												</SidebarMenuSubItem>):<></>}
 											<SidebarMenuSubItem>
-												<AlertDialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-													<AlertDialogTrigger asChild>
-														<Button variant={"outline"} className="rounded-md h-8 w-full shadow-[0_0_6px_rgba(0,0,0,0.03),0_2px_6px_rgba(0,0,0,0.08),inset_3px_3px_0.5px_-3px_rgba(0,0,0,0.9),inset_-3px_-3px_0.5px_-3px_rgba(0,0,0,0.85),inset_1px_1px_1px_-0.5px_rgba(0,0,0,0.6),inset_-1px_-1px_1px_-0.5px_rgba(0,0,0,0.6),inset_0_0_6px_6px_rgba(0,0,0,0.12),inset_0_0_2px_2px_rgba(0,0,0,0.06),0_0_12px_rgba(255,255,255,0.15)] transition-all dark:shadow-[0_0_8px_rgba(0,0,0,0.03),0_2px_6px_rgba(0,0,0,0.08),inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.09),inset_-3px_-3px_0.5px_-3.5px_rgba(255,255,255,0.85),inset_1px_1px_1px_-0.5px_rgba(255,255,255,0.6),inset_-1px_-1px_1px_-0.5px_rgba(255,255,255,0.6),inset_0_0_6px_6px_rgba(255,255,255,0.12),inset_0_0_2px_2px_rgba(255,255,255,0.06),0_0_12px_rgba(0,0,0,0.15)] flex items-center gap-4">New plane <LayersPlus size={12}/></Button>
-													</AlertDialogTrigger>
-													<AlertDialogContent>
-														<AlertDialogHeader>
-															<AlertDialogTitle className="flex items-center gap-2"><LayersPlus />New Plane</AlertDialogTitle>
-														</AlertDialogHeader>
-														<AlertDialogDescription>
-															Create your two-dimensional workspace to arrange dots and lines your way.
-														</AlertDialogDescription>
-														<CreatePlaneForm userId={userId} isDialogOpen={isDialogOpen} setDialogOpen={setDialogOpen}/>
-													</AlertDialogContent>
-												</AlertDialog>
+												<CreatePlaneButton userId={userId} />
 											</SidebarMenuSubItem>
 										</SidebarMenuSub>
 									</CollapsibleContent>
@@ -101,13 +86,13 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<CollapsibleContent>
 										<SidebarMenuSub>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><Kanban size={12} />Kanban</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><Kanban size={12} />Kanban</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><GanttChart size={12} />Gantt</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><GanttChart size={12} />Gantt</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><Calendar size={12} />Calendar</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><Calendar size={12} />Calendar</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 										</SidebarMenuSub>
 									</CollapsibleContent>
@@ -126,16 +111,16 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<CollapsibleContent>
 										<SidebarMenuSub>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><PieChart size={12} />Charts</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><PieChart size={12} />Charts</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><CircleAlert size={12} />Priorities</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><CircleAlert size={12} />Priorities</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><TriangleAlert size={12} />Risks</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><TriangleAlert size={12} />Risks</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><Link2 size={12} />Dependencies</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><Link2 size={12} />Dependencies</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 										</SidebarMenuSub>
 									</CollapsibleContent>
@@ -154,10 +139,10 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<CollapsibleContent>
 										<SidebarMenuSub>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><ListTodo size={12} />Assignements</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><ListTodo size={12} />Assignements</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 											<SidebarMenuSubItem>
-												<SidebarMenuSubButton className="flex items-center gap-2 text-xs"><MessageSquareDot size={12} />Mentions</SidebarMenuSubButton>
+												<SidebarMenuSubButton className="flex items-center gap-2 text-xs cursor-pointer"><MessageSquareDot size={12} />Mentions</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 										</SidebarMenuSub>
 									</CollapsibleContent>
@@ -226,7 +211,7 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<DropdownMenuItem><Link className="flex items-center gap-4" href={"/settings"}><CircleUserRound />Account</Link></DropdownMenuItem>
 									<DropdownMenuItem><Link className="flex items-center gap-4" href={"/notifications"}><BellDot />Notifications</Link></DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem variant="destructive" onClick={() => signOut()}><LogOut />Logout</DropdownMenuItem>
+									<DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={() => signOut()}><LogOut />Logout</DropdownMenuItem>
 								</DropdownMenuGroup>
 							</DropdownMenuContent>
 						</DropdownMenu>

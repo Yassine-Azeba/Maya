@@ -48,6 +48,19 @@ Top level container : Space | Plane
     Classification : object | Line
         work unit : echo    | Dot
 
+# Pages
+- Workspace
+- Settings
+- Help
+- tools/kanban
+- tools/gantt
+- tools/calendar
+- tools/charts
+- tools/priorities
+- tools/risks
+- tools/dependencies
+- tools/Assignements
+- tools/mentions
 
 Plane : Project Management
     Classification : Programms | Projects
@@ -59,19 +72,6 @@ Plane : Project Management
 
 Description :
 Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
-🟢
-| 🔴 | Nest    | When deleted all related branches are deleted   | 
-| 🔴 | Nest    | When deleted all related Leafs are deleted      | 
-| 🔴 | Branch  | Is top level or not                             | 
-| 🔴 | Branch  | Must belong to exactly one Nest                 |                 
-| 🔴 | Branch  | When deleted, all related Leafs are deleted     | 
-| 🔴 | Branch  | Parent Branch can't be from another Nest        | 
-| 🔴 | Leaf    | Must be linked to exactly one Branche           | 
-| 🔴 | Leaf    | Implicitly belongs to a Nest                    | 
-| 🔴 | Leaf    | Branche can't be from another Nest              | 
-| 🔴 | Leaf    | Parent Leaf can't be from another Nest          | 
-| 🔴 | Leaf    | Parent can't be the Leaf itself                 | 
-| 🔴 | Leaf    | When deleted, all child Leafs must be deleted   | 
 
 
 # Todo

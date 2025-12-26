@@ -1,29 +1,32 @@
 "use client"
 import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Dispatch, SetStateAction } from "react"
 import { toast } from "sonner"
-import { CreatePlane } from "@/data/planes"
-import { Loader } from "lucide-react"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { Input } from "./ui/input"
-import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
-import { RainbowButton } from "./ui/rainbow-button"
+import { Textarea } from "./ui/textarea"
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import { UpdatePlane } from "@/data/planes"
+import { Dispatch, SetStateAction } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 
 const formSchema = z.object({
   name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),
   description : z.string().max(2000, {error:"You can create as many plane as you want, but 2000 for the description is the limit."})
 })
 
-interface CreatePlaneForm {
-    userId: string,
+interface UpdatePlaneFormProps {
+    plane : {
+        planeId: string,
+        name : string,
+        description : string | null,
+        userId : string
+    },
     isDialogOpen : boolean,
     setDialogOpen : Dispatch<SetStateAction<boolean>>
 }
-export default function CreatePlaneForm({userId,isDialogOpen,setDialogOpen}:CreatePlaneForm){
+export default function UpdatePlaneForm({plane,isDialogOpen,setDialogOpen}:UpdatePlaneFormProps){
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
@@ -34,8 +37,7 @@ export default function CreatePlaneForm({userId,isDialogOpen,setDialogOpen}:Crea
     })
     function onSubmit(values : z.infer<typeof formSchema>){
         setDialogOpen(false)
-        toast.promise(CreatePlane({userId:userId,name:values.name,description:values.description}),{
-            duration: 10000,
+        toast.promise(UpdatePlane({planeId:plane.planeId,name:values.name,description:values.description}),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
             error: "Something wrong happened ..."
@@ -49,7 +51,7 @@ export default function CreatePlaneForm({userId,isDialogOpen,setDialogOpen}:Crea
                     <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                            <Input placeholder="Plane name" {...field}/>
+                            <Input placeholder={plane.name} {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -58,12 +60,12 @@ export default function CreatePlaneForm({userId,isDialogOpen,setDialogOpen}:Crea
                     <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                            <Textarea placeholder="Plane description" {...field}/>
+                            <Textarea placeholder={plane.description??"Plane Description"} {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}/>
-                <RainbowButton type="submit" className="mt-2">Submit</RainbowButton>
+                <Button type="submit" className="mt-2">Submit</Button>
             </form>
         </Form>
     )
