@@ -1,77 +1,85 @@
-"use client"
+'use client'
 import Link from "next/link"
-import { signOut } from "next-auth/react"
-import { useSession } from "next-auth/react"
-import CreatePlaneButton from "./button-plane-create"
+import { useTheme } from "next-themes"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import {Sidebar,SidebarContent,SidebarFooter,SidebarGroup,SidebarGroupContent,SidebarGroupLabel,SidebarHeader,SidebarMenu,SidebarMenuButton,SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar} from "@/components/ui/sidebar"
-import { BellDot, Calendar, Calendars, ChevronRight, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, EllipsisVertical, Focus, GanttChart, Handshake, Kanban, Layers, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
+import { StarsBackground } from "./animate-ui/components/backgrounds/stars"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./animate-ui/primitives/radix/collapsible"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./animate-ui/components/radix/dropdown-menu"
+import { BellDot, Calendar, Calendars, ChevronRight, ChevronsUpDown, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, Focus, GanttChart, Handshake, Kanban, Layers, LayoutDashboard, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "./animate-ui/components/radix/sidebar"
 
-interface AppSideBarProps {
-	userId : string,
-	planes : {
+interface AppSidebarProps {
+    type : "workspace_sidebar" | "plane_sidebar" | "dot_sidebar" | "tool_sidebar",
+    userId : string,
+    planes? : {
         planeId: string;
         name: string;
         description: string | null;
         userId: string;
     }[] | null
 }
-export function AppSidebar({userId,planes}:AppSideBarProps) {
-	const {data:session, status} = useSession()
-	const { isMobile } = useSidebar()
-	return (
-        <Sidebar collapsible="offcanvas" variant={"inset"}>
-			{/* ✅ Header : Title */}
+export default function AppSidebar({type,userId,planes}:AppSidebarProps){
+    const {data:session, status} = useSession()
+	const isMobile = useIsMobile()
+	const { theme } = useTheme()
+    return(
+        <Sidebar variant="inset" collapsible="icon">
+			<StarsBackground 
+			starColor={theme==='dark'?"white":'black'} 
+			className="absolute inset-0 flex items-center justify-center rounded-xl"/>
+            {/* Header Title */}
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
-                            <Link href="/workspace">
-                                <CircleDot size={16}/>
-                                <span className="text-base font-semibold">21 Dots.</span>
-                            </Link>
+                        <SidebarMenuButton size={"lg"}>
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-black dark:bg-white dark:text-black text-white">
+                                <CircleDot className="size-4" />
+                            </div>
+                            <span className="truncate font-semibold">21 Dots</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-			{/* ✅Content : Planes & Tools */}
-			<SidebarContent>
-				{/* ✅ First : Create & Display Planes */}
-				<SidebarGroup>
-					<SidebarGroupContent className="flex flex-col gap-2">
-						<SidebarMenu>
-							<Collapsible asChild defaultOpen className="group/collapsible">
-								<SidebarMenuItem>
-									<CollapsibleTrigger asChild>
-										<SidebarMenuButton tooltip={"My Planes"}>
-											<Layers />
-											<span className="text-sm">My Planes</span>
-											<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"/>
-										</SidebarMenuButton>
-									</CollapsibleTrigger>
-									<CollapsibleContent>
-										<SidebarMenuSub>
-											{planes?planes.map(plane => <SidebarMenuSubItem key={plane.planeId}>
-													<SidebarMenuSubButton href={`/planes/${plane.name}`} className="text-sm text-muted-foreground">
-														{plane.name}
-													</SidebarMenuSubButton>
-												</SidebarMenuSubItem>):<></>}
-											<SidebarMenuSubItem>
-												<CreatePlaneButton userId={userId} />
-											</SidebarMenuSubItem>
-										</SidebarMenuSub>
-									</CollapsibleContent>
-								</SidebarMenuItem>
-							</Collapsible>
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
-				{/* ✅ Second : Tools */}
-				<SidebarGroup>
+            {/* Content */}
+            <SidebarContent className="scrollbar-hide">
+                {/* Plane/dot List */}
+                {(type==="workspace_sidebar")?<SidebarGroup>
+                    <SidebarMenu>
+						<SidebarMenuItem>
+							<Link href={"/workspace"} className="w-full">
+								<SidebarMenuButton tooltip={"Dashboard"}>
+										<LayoutDashboard />
+										<span>Dashboard</span>
+								</SidebarMenuButton>
+							</Link>
+						</SidebarMenuItem>
+                        <Collapsible asChild className="group/collapsible">
+                            <SidebarMenuItem>
+                                <CollapsibleTrigger asChild>
+                                    <SidebarMenuButton tooltip={"Planes"}>
+                                        <Layers/>
+                                        <span>Planes</span>
+                                        <ChevronRight className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-90"/>
+                                    </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <SidebarMenuSub>
+                                        {planes?.map(plane => <SidebarMenuSubItem key={plane.planeId}>
+                                            <SidebarMenuSubButton href={`/planes/${plane.name}`}>{plane.name}</SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>)}
+                                    </SidebarMenuSub>
+                                </CollapsibleContent>
+                            </SidebarMenuItem>
+                        </Collapsible>
+                    </SidebarMenu>
+                </SidebarGroup>:<></>}
+                {/* TODO : plane_sidebar */}
+                {/* Tools */}
+                <SidebarGroup>
 					<SidebarGroupLabel>Tools</SidebarGroupLabel>
-					<SidebarContent>
+					<SidebarContent className="scrollbar-hide">
 						<SidebarMenu>
 							{/* Planning and Vizualization Tools */}
 							<Collapsible asChild className="group/collapsibleone">
@@ -150,10 +158,10 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 							</Collapsible>
 						</SidebarMenu>
 					</SidebarContent>
-				</SidebarGroup>
-				{/* ✅ Third : Settings and Notification */}
-				<SidebarGroup className="mt-auto">
-					<SidebarGroupContent>
+                </SidebarGroup>
+                {/* Settings and Notification */}
+                <SidebarGroup className="mt-auto">
+                    <SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
 								<SidebarMenuButton asChild>
@@ -173,11 +181,11 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 							</SidebarMenuItem>
 						</SidebarMenu>
 					</SidebarGroupContent>
-				</SidebarGroup>
-			</SidebarContent>
-			{/* ✅ Footer : User Informations & Actions */}
-			<SidebarFooter>
-				<SidebarMenu>
+                </SidebarGroup>
+            </SidebarContent>
+            {/* Footer */}
+            <SidebarFooter>
+                <SidebarMenu>
 					<SidebarMenuItem>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -190,10 +198,10 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 										<span className="truncate font-medium">{session?.user?.name}</span>
 										<span className="text-muted-foreground truncate text-xs">{session?.user?.email}</span>
 									</div>
-									<EllipsisVertical className="ml-auto size-4" />
+									<ChevronsUpDown className="ml-auto size-4" />
 								</SidebarMenuButton>
 							</DropdownMenuTrigger>
-							<DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" side={isMobile ? "bottom" : "right"} align="end" sideOffset={4}>
+							<DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] rounded-lg" side={isMobile ? "bottom" : "right"} align="end" sideOffset={4}>
 								<DropdownMenuLabel className="p-0 font-normal">
 									<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 										<Avatar className="h-8 w-8 rounded-lg">
@@ -211,14 +219,13 @@ export function AppSidebar({userId,planes}:AppSideBarProps) {
 									<DropdownMenuItem><Link className="flex items-center gap-4" href={"/settings"}><CircleUserRound />Account</Link></DropdownMenuItem>
 									<DropdownMenuItem><Link className="flex items-center gap-4" href={"/notifications"}><BellDot />Notifications</Link></DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={() => signOut()}><LogOut />Logout</DropdownMenuItem>
+									<DropdownMenuItem variant="destructive" className="cursor-pointer" onClick={() => signOut()}><LogOut />Logout</DropdownMenuItem>
 								</DropdownMenuGroup>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</SidebarMenuItem>
 				</SidebarMenu>
-			</SidebarFooter>
+            </SidebarFooter>
         </Sidebar>
     )
 }
-
