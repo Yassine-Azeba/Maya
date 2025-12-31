@@ -1,10 +1,10 @@
 'use server'
+import { GetUser } from "./user"
 import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { lines } from "@/db/lines"
 import { GetPlanes } from "./planes"
 import { DrizzleQueryError } from "drizzle-orm"
-import { GetUser } from "./user"
 
 // ✅✅ Create
 interface CreateLineProps {
@@ -41,7 +41,6 @@ export async function CreateLine({name,description,userId,planeId,parentId}:Crea
             return {success: false, message: "Unknown error occured. Please try again.", data: null}
         }
     }
-
 }
 
 // ✅✅ Read
@@ -87,10 +86,10 @@ export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
 }
 
 // ✅✅ Get parents
-interface GetParentsProps {
+interface GetLineParentsProps {
     lineId : string
 }
-export async function GetParents({lineId}:GetParentsProps) {
+export async function GetLineParents({lineId}:GetLineParentsProps) {
     const line = await GetLines({lineId:lineId})
     if(!line || line.success === false || !line.data) return {success: false, message: "Can't find line.", data: null}
     var parents : string[] = []
@@ -104,41 +103,41 @@ export async function GetParents({lineId}:GetParentsProps) {
             parentLineId = newLine.data[0].parent
         }
     }
-    return {success: true, message: "All line parents retrieved successfully.", data: parents}
+    return {success: true, message: "All parents lines retrieved successfully.", data: parents}
 }
 
-// ✅✅ Checks : isParent
+// ✅✅ Checks : is Parent ?
 interface IsParentProps {
     parentlineId : string,
     lineId : string
 }
 export async function IsParent({parentlineId,lineId}:IsParentProps) {
     const parentLine = await GetLines({lineId:parentlineId})
-    if(!parentLine || parentLine.success === false || !parentLine.data) return {success: false, message: `${parentLine} doesn't exist.`, data: null}
+    if(!parentLine || parentLine.success === false || !parentLine.data) return {success: false, message: "Line does not exist", data: null}
     const line = await GetLines({lineId:lineId})
-    if(!line || line.success === false || !line.data) return {success: false, message: `${line} doesn't exist.`, data: null}
+    if(!line || line.success === false || !line.data) return {success: false, message: "Line does not exist", data: null}
 
-    const lineParents = await GetParents({lineId : lineId})
+    const lineParents = await GetLineParents({lineId : lineId})
     if(lineParents && lineParents.success === true && lineParents.data && lineParents.data.includes(parentlineId)) return {success: true, message: "Parent line is parent of Line.", data: null}
     return {success: false, message: "Parent Line is not parent of Line.", data: null}
 }
 
-// ✅✅ Checks : lines from the same plane
+// ✅✅ Checks : lines from the same plane ?
 interface areLineFromSamePlaneProps {
     lineIdA : string,
     lineIdB : string
 }
 export async function AreLineFromSamePlane({lineIdA,lineIdB}:areLineFromSamePlaneProps) {
     const lineA = await GetLines({lineId:lineIdA})
-    if(!lineA || lineA.success === false || !lineA.data) return {success: false, message: `${lineA} doesn't exist.`, data: null}
+    if(!lineA || lineA.success === false || !lineA.data) return {success: false, message: "Line does not exist", data: null}
     const lineB = await GetLines({lineId:lineIdB})
-    if(!lineB || lineB.success === false || !lineB.data) return {success: false, message: `${lineB} doesn't exist.`, data: null}
+    if(!lineB || lineB.success === false || !lineB.data) return {success: false, message: "Line does not exist", data: null}
 
     if(lineA.data[0].plane === lineB.data[0].plane) return {success: true, message: "Both lines are from the same plane.", data: null}
     return {success: false, message: "Lines are from different planes.", data: null}
 }
 
-// ✅✅ Checks : is parent line same as line
+// ✅✅ Checks : is parent line same as line ?
 interface isParentLineSameAsLineProps {
     parentLineId : string,
     lineId : string
@@ -195,11 +194,10 @@ interface DeleteLineProps {
     lineId : string
 }
 export async function DeleteLine({lineId}:DeleteLineProps) {
-    if(!lineId) return {success: false, message: "Invalid input.", data: null}
     try {
         const result = await db.delete(lines).where(eq(lines.lineId,lineId))
         if(result.rowCount === 1) return {success: true, message: "Line deleted successfully.", data: null}
-        else return {success: false, message: "Unknown error occured. Please try again.", data: null}
+        else return {success: false, message: "Can't delete line. Please try again.", data: null}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
             return {success: false, message: error.message, data: null}

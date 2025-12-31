@@ -72,22 +72,3 @@ Plane : Project Management
 
 Description :
 Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
-
-
-# Todo
-A continuer demain :
-- Création suppression Echo (Form, DeleteButton)
-- Implémenter contrainte :
-    - Assignation parent Objet
-        - pas dans un autre space
-        - pas fils de l'objet en lui même
-    - Assignation parent echo
-        - objet de l'echo parent appartient au space de l'objet de l'echo lui même
-        - objet de l'echo parent n'est pas fils de l'echo lui même
-
-
-Workflows :
-- Create Space
-- Create Objects
-    - If parent assign : check if parent object is in the same space
-    - If parent assign : check if parent object is not child or child of child.
