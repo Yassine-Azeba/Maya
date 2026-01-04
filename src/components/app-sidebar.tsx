@@ -26,9 +26,6 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
 	const { theme } = useTheme()
     return(
         <Sidebar variant="inset" collapsible="icon">
-			<StarsBackground 
-			starColor={theme==='dark'?"white":'black'} 
-			className="absolute inset-0 flex items-center justify-center rounded-xl"/>
             {/* Header Title */}
             <SidebarHeader>
                 <SidebarMenu>
@@ -37,7 +34,7 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
                             <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-black dark:bg-white dark:text-black text-white">
                                 <CircleDot className="size-4" />
                             </div>
-                            <span className="truncate font-semibold">21 Dots</span>
+                            <span className="truncate font-semibold">Dimensions</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -67,7 +64,7 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
                                         {planes?.map(plane => <SidebarMenuSubItem key={plane.planeId}>
-                                            <SidebarMenuSubButton href={`/planes/${plane.name}`}>{plane.name}</SidebarMenuSubButton>
+                                            <SidebarMenuSubButton className="truncate" href={`/planes/${plane.name}`}>{plane.name}</SidebarMenuSubButton>
                                         </SidebarMenuSubItem>)}
                                     </SidebarMenuSub>
                                 </CollapsibleContent>

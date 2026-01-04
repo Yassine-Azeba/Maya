@@ -1,32 +1,26 @@
 "use client"
 import { z } from "zod"
 import { toast } from "sonner"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
-import { Textarea } from "./ui/textarea"
+import { Input } from "../ui/input"
+import { Textarea } from "../ui/textarea"
 import { useForm } from "react-hook-form"
+import { CreatePlane } from "@/data/planes"
 import { useRouter } from "next/navigation"
-import { UpdatePlane } from "@/data/planes"
 import { Dispatch, SetStateAction } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { RainbowButton } from "../ui/rainbow-button"
 
 const formSchema = z.object({
   name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),
   description : z.string().max(2000, {error:"You can create as many plane as you want, but 2000 for the description is the limit."})
 })
 
-interface UpdatePlaneFormProps {
-    plane : {
-        planeId: string,
-        name : string,
-        description : string | null,
-        userId : string
-    },
-    isDialogOpen : boolean,
-    setDialogOpen : Dispatch<SetStateAction<boolean>>
+interface CreatePlaneForm {
+    userId: string,
+    setDialogOpen? : Dispatch<SetStateAction<boolean>>
 }
-export default function UpdatePlaneForm({plane,isDialogOpen,setDialogOpen}:UpdatePlaneFormProps){
+export default function CreatePlaneForm({userId,setDialogOpen}:CreatePlaneForm){
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
@@ -36,8 +30,8 @@ export default function UpdatePlaneForm({plane,isDialogOpen,setDialogOpen}:Updat
         }
     })
     function onSubmit(values : z.infer<typeof formSchema>){
-        setDialogOpen(false)
-        toast.promise(UpdatePlane({planeId:plane.planeId,name:values.name,description:values.description}),{
+        if(setDialogOpen){setDialogOpen(false)}
+        toast.promise(CreatePlane({userId:userId,name:values.name,description:values.description}),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
             error: "Something wrong happened ..."
@@ -51,7 +45,7 @@ export default function UpdatePlaneForm({plane,isDialogOpen,setDialogOpen}:Updat
                     <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                            <Input placeholder={plane.name} {...field}/>
+                            <Input placeholder="Plane name" {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -60,12 +54,12 @@ export default function UpdatePlaneForm({plane,isDialogOpen,setDialogOpen}:Updat
                     <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                            <Textarea placeholder={plane.description??"Plane Description"} {...field}/>
+                            <Textarea placeholder="Plane description" {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}/>
-                <Button type="submit" className="mt-2">Submit</Button>
+                <RainbowButton type="submit" className="mt-2">Submit</RainbowButton>
             </form>
         </Form>
     )

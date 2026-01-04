@@ -1,51 +1,75 @@
 import Link from "next/link"
 import { GetUser } from "@/data/user"
+import { GetLines } from "@/data/lines"
 import { GetPlanes } from "@/data/planes"
 import { getSession } from "@/lib/nextauth"
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import CreatePlaneButton from "@/components/button-plane-create"
-import DeletePlaneButton from "@/components/button-plane-delete"
-import UpdatePlaneButton from "@/components/button-plane-update"
-import { ArrowUpRight, EllipsisVertical, LayersPlus } from "lucide-react"
+import CreatePlaneForm from "@/components/forms/create-plane"
+import CreateLineButton from "@/components/buttons/create-line"
+import CreatePlaneButton from "@/components/buttons/create-plane"
+import UpdatePlaneButton from "@/components/buttons/update-plane"
+import DeletePlaneButton from "@/components/buttons/delete-plane"
+import { ArrowUpRight, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucide-react"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
 
 export default async function Workspace(){
     const session = await getSession()
     const user = await GetUser({email:session?.user?.email!})
     const planes = await GetPlanes({userId:user.data![0].id})
+    const lines = await GetLines({userId:user.data![0].id})
     return(
         <div className="w-full h-full">
-            {(planes.data && planes.data.length>0)?<div className="w-full flex flex-col py-3 px-6 gap-3">
-                <h1 className="text-xl font-medium">Planes</h1>
-                <div className="w-full grid grid-cols-3 gap-2 max-sm:grid-cols-1">
-                    {planes.data.map(plane => <Link key={plane.planeId} href={`/plane/${plane.name}`}>
-                        <Card className="w-full h-20 py-2 px-4">
-                            <div className="w-full h-full flex flex-col gap-3">
-                                <div className="grid grid-cols-12">
-                                    <div className="col-span-11 flex flex-col gap-0.5">
-                                        <h1 className="text-sm font-medium truncate">{plane.name}</h1>
-                                        <h1 className="text-muted-foreground text-xs truncate">{plane.description}</h1>
-                                    </div>
-                                    <div className="col-span-1">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger>
-                                                <div className="text-muted-foreground cursor-pointer pl-2">
-                                                    <EllipsisVertical size={16} />
-                                                </div>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="flex flex-col gap-1">
-                                                <DropdownMenuItem asChild><UpdatePlaneButton plane={plane}/></DropdownMenuItem>
-                                                <DropdownMenuItem asChild><DeletePlaneButton planeId={plane.planeId}/></DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
-                    </Link>)}
-                </div>
+            {(planes.data && planes.data.length>0)?<div className="w-full h-full p-2">
+                <Tabs defaultValue={planes.data[0].name}>
+                    <TabsList>
+                        {/* TODO : overflow when too much tabs */}
+                        {planes.data.map(plane => <TabsTrigger key={plane.name} value={plane.name}>{plane.name}</TabsTrigger>)}
+                        <TabsTrigger value={"New Plane"}><SquarePlus /></TabsTrigger>
+                    </TabsList>
+                    <Card>
+                        <TabsContents>
+                            {planes.data.map(plane => {
+                                const planeLines = lines.data?.filter(line => line.plane === plane.planeId)
+                                return(
+                                    <TabsContent className="flex flex-col gap-2" key={plane.name} value={plane.name}>
+                                        <CardHeader>
+                                            <div className="flex items-center gap-2">
+                                                <CardTitle className="text-sm">{plane.name}</CardTitle>
+                                                <UpdatePlaneButton plane={plane}>
+                                                    <Edit2 size={12}/>
+                                                </UpdatePlaneButton>
+                                                <DeletePlaneButton plane={plane}>
+                                                    <Trash2 size={12}/>
+                                                </DeletePlaneButton>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <CardDescription className="text-xs">{plane.description}</CardDescription>
+                                                <UpdatePlaneButton descriptionOnly plane={plane}>
+                                                    <div className="text-muted-foreground"><Edit2 size={10}/></div>
+                                                </UpdatePlaneButton>
+                                            </div>
+                                            <CardAction>
+                                                <CreateLineButton planeId={plane.planeId} lines={planeLines} userId={user.data![0].id}>
+                                                    <Button variant={"outline"} size={"icon-sm"}>
+                                                        <Plus />
+                                                    </Button>
+                                                </CreateLineButton>
+                                            </CardAction>
+                                        </CardHeader>
+                                        <CardContent>
+                                            {/* <DotList planeId={plane.planeId} lines={planeLines} /> */}
+                                        </CardContent>
+                                    </TabsContent>
+                                )})
+                            }
+                            <TabsContent className="p-28" value="New Plane">
+                                <CreatePlaneForm userId={user.data![0].id}/>
+                            </TabsContent>
+                        </TabsContents>
+                    </Card>
+                </Tabs>
             </div>:<div>
                 <Empty>
                     <EmptyHeader>
@@ -56,7 +80,9 @@ export default async function Workspace(){
                         <EmptyDescription>You haven't created a plane yet. Get started by creating your first plane.</EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
-                        <CreatePlaneButton userId={user.data![0].id}/>
+                        <CreatePlaneButton userId={user.data![0].id}>
+                            <Button className="h-8 w-full flex items-center gap-4">New plane <LayersPlus size={12}/></Button>
+                        </CreatePlaneButton>
                     </EmptyContent>
                     <Button variant={"link"} className="text-muted-foreground">
                         <Link href={"/help"} className="flex items-center">Get help<ArrowUpRight className="pt-0.5" /></Link>

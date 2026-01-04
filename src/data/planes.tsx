@@ -74,28 +74,14 @@ interface UpdatePlaneProps {
     description?:string
 }
 export async function UpdatePlane({planeId,name,description}:UpdatePlaneProps) {
-    if(!planeId) return {success: false, message: "Missing parameter (plane id).", data: null}
+    const plane = await GetPlanes({planeId:planeId})
+    if(!plane || plane.success === false || !plane.data) return {success: false, message: "Plane does not exist.", data: null} 
     try {
-        if(name && description) { // Case 1 : Update plane name and description
-            const result = await db.update(planes).set({
-                name : name,
-                description : description
-            }).where(eq(planes.planeId,planeId)).returning()
-            return {success: true, message: "Plane successfully updated.", data: result}
-        }
-        if (name && !description) { // Case 2 : Update plane name only
-            const result = await db.update(planes).set({
-                name : name
-            }).where(eq(planes.planeId,planeId)).returning()
-            return {success: true, message: "Plane name successfully updated.", data: result}
-        }
-        if (!name && description) { // Case 3 : Update plane description only
-            const result = await db.update(planes).set({
-                description : description
-            }).where(eq(planes.planeId,planeId)).returning()
-            return {success: true, message: "Plane description successfully updated.", data: result}
-        }
-        return {success: false, message: "Unknown error occured (missing attributs ?).", data: null}
+        const result = await db.update(planes).set({
+            name : name?name:plane.data[0].name,
+            description : description?description:plane.data[0].description
+        }).where(eq(planes.planeId,planeId)).returning()
+        return {success: true, message: "Plane successfully updated.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
             return {success: false, message: error.message, data: null}

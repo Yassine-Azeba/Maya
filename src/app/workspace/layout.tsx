@@ -12,7 +12,7 @@ export default async function WorkspaceLayout({children}: Readonly<{children: Re
     return(
         <SidebarProvider>
             <AppSidebar userId={user.data![0].id} planes={planes.data} type={"workspace_sidebar"}/>
-            <SidebarInset>
+            <SidebarInset className="overflow-x-hidden">
                 <AppHeader />
                 {children}
             </SidebarInset>
