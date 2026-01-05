@@ -40,7 +40,10 @@ export default function UpdatePlaneForm({plane,descriptionOnly,setDialogOpen}:Up
     })
     function onSubmit(values : z.infer<typeof formSchema>){
         if(setDialogOpen) setDialogOpen(false)
-            toast.promise(UpdatePlane({planeId:plane.planeId,name:values.name,description:values.description}),{
+            toast.promise(UpdatePlane({
+                planeId:plane.planeId,
+                name:values.name,
+                description:values.description}),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
             error: "Something wrong happened ..."

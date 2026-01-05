@@ -4,14 +4,13 @@ import { useTheme } from "next-themes"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { StarsBackground } from "./animate-ui/components/backgrounds/stars"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./animate-ui/primitives/radix/collapsible"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./animate-ui/components/radix/dropdown-menu"
 import { BellDot, Calendar, Calendars, ChevronRight, ChevronsUpDown, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, Focus, GanttChart, Handshake, Kanban, Layers, LayoutDashboard, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "./animate-ui/components/radix/sidebar"
 
 interface AppSidebarProps {
-    type : "workspace_sidebar" | "plane_sidebar" | "dot_sidebar" | "tool_sidebar",
+    type : "workspace_sidebar" | "plane_sidebar" | "line_sidebar" | "tool_sidebar",
     userId : string,
     planes? : {
         planeId: string;
@@ -72,7 +71,6 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
                         </Collapsible>
                     </SidebarMenu>
                 </SidebarGroup>:<></>}
-                {/* TODO : plane_sidebar */}
                 {/* Tools */}
                 <SidebarGroup>
 					<SidebarGroupLabel>Tools</SidebarGroupLabel>

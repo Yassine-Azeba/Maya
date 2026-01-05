@@ -1,17 +1,17 @@
 'use client'
 import { toast } from "sonner"
 import React, { useState } from "react"
+import { DeleteLine } from "@/data/lines"
 import { useRouter } from "next/navigation"
-import { DeletePlane } from "@/data/planes"
 import { Trash2, TriangleAlert } from "lucide-react"
 import { FlipButton, FlipButtonBack, FlipButtonFront } from "../animate-ui/components/buttons/flip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 
-interface DeletePlaneButtonProps {
-    planeId: string,
+interface DeleteLineButtonProps {
+    lineId: string,
     children : React.ReactNode
 }
-export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonProps){
+export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     const router = useRouter()
     return(
@@ -22,13 +22,13 @@ export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonPr
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>Delete Plane</DialogTitle>
-                        <DialogDescription className="flex items-center gap-2"><TriangleAlert size={12}/> All lines, dots and tools related to this plane will be deleted.</DialogDescription>
-                        <DialogDescription>Are you sure you want to delete this plane ?</DialogDescription>
+                        <DialogTitle>Delete Line</DialogTitle>
+                        <DialogDescription className="flex items-center gap-2"><TriangleAlert size={12}/> All children lines and tools related to this line will be deleted.</DialogDescription>
+                        <DialogDescription>Are you sure you want to delete this line ?</DialogDescription>
                     </DialogHeader>
                     <FlipButton onClick={() => {
                         setIsOpen(false)
-                        toast.promise(DeletePlane({planeId:planeId}), {
+                        toast.promise(DeleteLine({lineId:lineId}), {
                             loading: "Loading ...",
                             success: (data) => `${data.message}`,
                             error: "Something wrong happened ..."

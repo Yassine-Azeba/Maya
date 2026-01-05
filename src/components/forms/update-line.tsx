@@ -1,4 +1,79 @@
+"use client"
+import { z } from "zod"
+import { toast } from "sonner"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import { Textarea } from "../ui/textarea"
+import { useForm } from "react-hook-form"
+import { UpdateLine } from "@/data/lines"
+import { useRouter } from "next/navigation"
+import { Dispatch, SetStateAction } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 
+interface UpdateLineFormProps {
+    lineId : string,
+    lines : {
+        lineId: string;
+        name: string;
+        description: string | null;
+        parent: string | null;
+        plane: string;
+        user: string;
+    }[],
+    setDialogOpen? : Dispatch<SetStateAction<boolean>>
+}
 
-
-export default function UpdateLineForm(){}
+const formSchema = z.object({
+  name: z.string().min(1, {error:"Give your line a little more space: 1 characters minimum."}).max(255, {error:"This line name is flying too far — 255 characters is the limit."}),
+  description : z.string().max(5000, {error:"That's a very long description you got here."})
+})
+export default function UpdateLineForm({lineId,lines,setDialogOpen}:UpdateLineFormProps){
+    const line = lines.filter(line => line.lineId === lineId)[0]
+    const router = useRouter()
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver : zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            description: ""
+        }
+    })
+    function onSubmit(values : z.infer<typeof formSchema>){
+        if(setDialogOpen) setDialogOpen(false)
+            toast.promise(UpdateLine({
+                lineId:lineId,
+                name:values.name,
+                description:values.description
+            }),{
+            loading: "Loading ...",
+            success: (data) => `${data.message}`,
+            error: "Something wrong happened ..."
+        })
+        router.refresh()
+    }
+    return(
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
+                <FormField control={form.control} name="name" render={({field}) => (
+                    <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                            <Input placeholder={line.name} {...field}/>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
+                <FormField control={form.control} name="description" render={({field}) => (
+                    <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder={line.description??"Plane Description"} {...field}/>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
+                <Button type="submit" className="mt-2">Submit</Button>
+            </form>
+        </Form>
+    )
+}

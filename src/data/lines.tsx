@@ -177,8 +177,8 @@ export async function UpdateLine({lineId,name,description,parentId}:UpdateLinePr
             name: name?name:line.data[0].name,
             description: description?description:line.data[0].name,
             parent : parentId?parentId:line.data[0].parent,
-        }).returning()
-        return {success: true, message: "Line created successfully.", data: result}
+        }).where(eq(lines.lineId,lineId)).returning()
+        return {success: true, message: "Line updated successfully.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
             return {success: false, message: error.message, data: null}

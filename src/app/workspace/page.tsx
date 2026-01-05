@@ -13,6 +13,7 @@ import { ArrowUpRight, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucid
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
+import List from "@/components/list"
 
 export default async function Workspace(){
     const session = await getSession()
@@ -40,7 +41,7 @@ export default async function Workspace(){
                                                 <UpdatePlaneButton plane={plane}>
                                                     <Edit2 size={12}/>
                                                 </UpdatePlaneButton>
-                                                <DeletePlaneButton plane={plane}>
+                                                <DeletePlaneButton planeId={plane.planeId}>
                                                     <Trash2 size={12}/>
                                                 </DeletePlaneButton>
                                             </div>
@@ -59,7 +60,7 @@ export default async function Workspace(){
                                             </CardAction>
                                         </CardHeader>
                                         <CardContent>
-                                            {/* <DotList planeId={plane.planeId} lines={planeLines} /> */}
+                                            <List planeId={plane.planeId} userId={user.data![0].id} lines={planeLines}/>
                                         </CardContent>
                                     </TabsContent>
                                 )})
@@ -70,7 +71,7 @@ export default async function Workspace(){
                         </TabsContents>
                     </Card>
                 </Tabs>
-            </div>:<div>
+            </div>:<div className="w-full h-full flex items-center justify-center pb-10">
                 <Empty>
                     <EmptyHeader>
                         <EmptyMedia variant={"icon"}>
