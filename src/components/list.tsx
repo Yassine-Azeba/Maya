@@ -69,7 +69,7 @@ function ListItem({lineId,lines,margin}:ListItemProps){
                 <div onClick={() => setChildrenOpen(!isChildrenOpen)} className="w-full rounded-sm bg-muted py-1 px-4 flex items-center justify-between">
                     <h1 className="text-sm font-medium">{line.name}</h1>
                     <div className="flex items-center gap-3 text-muted-foreground">
-                        <h1 className="text-xs">{childrens.length} Childrens</h1>
+                        {(childrens.length>0)?<h1 className="text-xs">{childrens.length} Childrens</h1>:<></>}
                         <UpdateLineButton lineId={line.lineId} lines={lines}><Edit size={12}/></UpdateLineButton>
                         <DeleteLineButton lineId={line.lineId}><Trash2 size={12} color="red" className="opacity-50"/></DeleteLineButton>
                     </div>
