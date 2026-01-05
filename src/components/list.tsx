@@ -1,11 +1,11 @@
 'use client'
 import { useState } from "react"
 import { Button } from "./ui/button"
+import DeleteLineButton from "./buttons/delete-line"
 import CreateLineButton from "./buttons/create-line"
 import UpdateLineButton from "./buttons/update-line"
 import { Edit, SquarePlus, Trash2 } from "lucide-react"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "./ui/empty"
-import DeleteLineButton from "./buttons/delete-line"
 
 interface ListProps {
     userId : string,
@@ -72,7 +72,6 @@ function ListItem({lineId,lines,margin}:ListItemProps){
                         <h1 className="text-xs">{childrens.length} Childrens</h1>
                         <UpdateLineButton lineId={line.lineId} lines={lines}><Edit size={12}/></UpdateLineButton>
                         <DeleteLineButton lineId={line.lineId}><Trash2 size={12} color="red" className="opacity-50"/></DeleteLineButton>
-                        {margin}
                     </div>
                 </div>
             </div>

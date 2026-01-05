@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 interface CreateLineFormProps {
     planeId : string,
@@ -71,7 +71,7 @@ export default function CreateLineForm({planeId,userId,lines,setIsOpen}:CreateLi
                         <FormMessage />
                     </FormItem>
                 )}/>
-                {lines?
+                {(lines && lines.length > 0)?
                     <div className="flex flex-col gap-0.5">
                         <h1 className="text-sm font-medium">Parent</h1>
                         <Select defaultValue={undefined} onValueChange={setParent}>

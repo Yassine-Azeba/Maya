@@ -7,10 +7,11 @@ import { Textarea } from "../ui/textarea"
 import { useForm } from "react-hook-form"
 import { UpdateLine } from "@/data/lines"
 import { useRouter } from "next/navigation"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { RemoveChildren } from "@/lib/remove-childrens"
 interface UpdateLineFormProps {
     lineId : string,
     lines : {
@@ -30,7 +31,10 @@ const formSchema = z.object({
 })
 export default function UpdateLineForm({lineId,lines,setDialogOpen}:UpdateLineFormProps){
     const line = lines.filter(line => line.lineId === lineId)[0]
+    const parentLine = lines.filter(line => line.parent === line.parent)[0]
+    const linesWithoutChildrens = RemoveChildren({lineId:lineId,lines:lines})
     const router = useRouter()
+    const [parent,setParent] = useState<string|undefined>(parentLine.lineId)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
         defaultValues: {
@@ -72,6 +76,18 @@ export default function UpdateLineForm({lineId,lines,setDialogOpen}:UpdateLineFo
                         <FormMessage />
                     </FormItem>
                 )}/>
+                {(linesWithoutChildrens && linesWithoutChildrens.length > 0)?
+                    <div className="flex flex-col gap-0.5">
+                        <h1 className="text-sm font-medium">Parent</h1>
+                        <Select defaultValue={undefined} onValueChange={setParent}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Parent"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {linesWithoutChildrens.map(line => <SelectItem key={line.lineId} value={line.lineId}>{line.name}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>:<></>}
                 <Button type="submit" className="mt-2">Submit</Button>
             </form>
         </Form>

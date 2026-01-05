@@ -34,6 +34,7 @@ add drizzle adapter:
 - Gantt
 - Calendar
 - Dependencies
+- React.Flow view (tree)
 ## Clarity and Focus
 - Charts
 - Priorities
