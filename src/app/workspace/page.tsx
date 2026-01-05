@@ -1,4 +1,5 @@
 import Link from "next/link"
+import List from "@/components/list"
 import { GetUser } from "@/data/user"
 import { GetLines } from "@/data/lines"
 import { GetPlanes } from "@/data/planes"
@@ -13,7 +14,6 @@ import { ArrowUpRight, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucid
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
-import List from "@/components/list"
 
 export default async function Workspace(){
     const session = await getSession()
