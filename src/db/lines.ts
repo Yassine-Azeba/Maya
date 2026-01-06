@@ -8,6 +8,6 @@ export const lines = pgTable("lines", {
     description : text("description"),
 
     parent : text("parent").references(() : AnyPgColumn => lines.lineId, {onDelete: "cascade"}),
-    plane : text("line").references(() => planes.planeId, {onDelete : "cascade"}).notNull(),
-    user : text("user").references(() => users.id, {onDelete : "cascade"}).notNull()
+    plane : text("plane").references(() => planes.planeId, {onDelete : "cascade"}).notNull(),
+    userId : text("user_id").references(() => users.id, {onDelete : "cascade"}).notNull()
 })

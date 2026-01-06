@@ -29,9 +29,9 @@ export async function CreateLine({name,description,userId,planeId,parentId}:Crea
         const result = await db.insert(lines).values({
             name: name,
             description: description,
-            user : userId,
+            userId : userId,
             parent : parentId,
-            plane : planeId
+            plane : planeId,
         }).returning()
         return {success: true, message: "Line created successfully.", data: result}
     } catch (error) {
@@ -58,7 +58,7 @@ export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
         if(userId){
             const user = await GetUser({userId:userId})
             if(!user || user.success === false || !user.data) return {success: false, message: "User doesn't exist.", data: null}
-            const result = await db.select().from(lines).where(eq(lines.user,userId))
+            const result = await db.select().from(lines).where(eq(lines.userId,userId))
             return {success: true, message: "Line(s) successfully retrieved.", data: result}
         }
         if(planeId){

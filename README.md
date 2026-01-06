@@ -73,3 +73,33 @@ Plane : Project Management
 
 Description :
 Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
+
+### Custom attributs
+- string
+- number
+- date
+- boolean
+- hex
+- Metadata : 
+    - applyToChildren ? 
+    - requiredForChildren ? 
+    - defaultValue ?
+    - validationRules ? => (v2)
+
+
+
+Features to come :
+- Views/Tools for planes or individual line
+    - Shadcn
+        - Kanban
+        - Gantt
+        - Calendar
+        - Chart
+    - React.flow
+        - Tree (React.flow)
+        - Database schema (React.flow)
+    - To be defined
+        - Dependencies
+        - Alert
+        - Rules (validationRules : Custom Attributs)
+        - Automation rules (cron ...)
