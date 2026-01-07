@@ -16,7 +16,7 @@ interface ListProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[] | undefined
 }
 export default function List({userId,planeId,lines}:ListProps){
@@ -52,7 +52,7 @@ interface ListItemProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[],
     margin : number,
 }

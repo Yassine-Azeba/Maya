@@ -11,7 +11,7 @@ interface UpdateLineButtonProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[],
     children : React.ReactNode
 }

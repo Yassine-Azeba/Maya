@@ -14,7 +14,7 @@ export const customAttributs = pgTable("custom_attributs", {
     type : customAttributTypes(),
 
     plane : text("plane").references(() => planes.planeId, {onDelete : "cascade"}).notNull(),
-    line : text("line").references(() => lines.lineId, {onDelete : "cascade"}).notNull(),
+    line : text("line").references(() => lines.lineId, {onDelete : "cascade"}),
     userId : text("user_id").references(() => users.id, {onDelete : "cascade"}).notNull(),
 
     appliesToChildrens : boolean("applies_to_childrens").notNull().default(false),

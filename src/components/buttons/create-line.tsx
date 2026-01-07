@@ -13,7 +13,7 @@ interface CreateLineButtonProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[] | undefined
 }
 export default function CreateLineButton({planeId,userId,lines,children}:CreateLineButtonProps){

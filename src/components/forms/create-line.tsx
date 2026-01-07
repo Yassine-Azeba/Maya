@@ -21,7 +21,7 @@ interface CreateLineFormProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[] | undefined,
     setIsOpen?: Dispatch<SetStateAction<boolean>>,
 }

@@ -7,7 +7,7 @@ interface GetChildrenProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[],
 }
 export function GetChildren({firstLineId,lines}:GetChildrenProps){
@@ -35,7 +35,7 @@ interface RemoveChildrenProps {
         description: string | null;
         parent: string | null;
         plane: string;
-        user: string;
+        userId: string;
     }[],
 }
 export function RemoveChildren({lineId, lines}:RemoveChildrenProps){

@@ -17,6 +17,7 @@ export async function CreatePlane({userId,name,description}:CreatePlaneProps) {
     const user = await GetUser({userId:userId})
     if(!user || user.success === false || !user.data) return {success: false, message: "Invalid user.", data: null}
     const plane = await GetPlanes({userId:userId})
+    // Check if plane already exist (name is unique)
     const filteredPlane = plane.data?.filter(plane => plane.name === name)
     if(filteredPlane && filteredPlane.length > 0) return {success: false, message: "Plane already exist.", data: null}
     try{
@@ -76,6 +77,11 @@ interface UpdatePlaneProps {
 export async function UpdatePlane({planeId,name,description}:UpdatePlaneProps) {
     const plane = await GetPlanes({planeId:planeId})
     if(!plane || plane.success === false || !plane.data) return {success: false, message: "Plane does not exist.", data: null} 
+    // if name is updated, check if another plane don't already have the same name
+    if(name){
+        const filteredPlane = plane.data?.filter(plane => plane.name === name && plane.planeId !== planeId)
+        if(filteredPlane && filteredPlane.length > 0) return {success: false, message: "Another plane already have the same name.", data: null}
+    }
     try {
         const result = await db.update(planes).set({
             name : name?name:plane.data[0].name,
@@ -96,7 +102,6 @@ interface DeletePlaneProps {
     planeId : string
 }
 export async function DeletePlane({planeId}:DeletePlaneProps) {
-    if(!planeId) return {success: false, message: "Missing parameter (plane id).", data: null}
     try {
         const result = await db.delete(planes).where(eq(planes.planeId,planeId)).returning()
         return {success: true, message: "Plane successfully deleted.", data: result}
