@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono } from "next/font/google"
 import AuthProvider from "@/components/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
+import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -28,7 +29,9 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<AuthProvider session={session}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-						{children}
+						<TooltipProvider>
+							{children}
+						</TooltipProvider>
 						<Toaster />
 					</ThemeProvider>
 				</AuthProvider>

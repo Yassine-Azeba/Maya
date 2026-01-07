@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { DeletePlane } from "@/data/planes"
 import { Trash2, TriangleAlert } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { FlipButton, FlipButtonBack, FlipButtonFront } from "../animate-ui/components/buttons/flip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 
@@ -16,9 +17,14 @@ export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonPr
     const router = useRouter()
     return(
         <div>
-            <div onClick={() => setIsOpen(true)}>
-                {children}
-            </div>
+            <Tooltip>
+                <TooltipTrigger>
+                    <div onClick={() => setIsOpen(true)}>
+                        {children}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent><p>Delete Plane</p></TooltipContent>
+            </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>

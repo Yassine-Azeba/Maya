@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from "react"
 import UpdatePlaneForm from "../forms/update-plane"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
-
 interface UpdatePlaneButtonProps {
     plane : {
         planeId: string,
@@ -17,9 +17,14 @@ export default function UpdatePlaneButton({plane,descriptionOnly,children}:Updat
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
-            <div onClick={() => setIsOpen(true)}>
-                {children}
-            </div>
+            <Tooltip>
+                <TooltipTrigger>
+                    <div onClick={() => setIsOpen(true)}>
+                        {children}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent><p>Update Plane</p></TooltipContent>
+            </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>

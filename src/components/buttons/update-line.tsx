@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from "react"
 import UpdateLineForm from "../forms/update-line"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 
 interface UpdateLineButtonProps {
@@ -19,9 +20,14 @@ export default function UpdateLineButton({lineId,lines,children}:UpdateLineButto
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
-            <div onClick={() => setIsOpen(true)}>
-                {children}
-            </div>
+            <Tooltip>
+                <TooltipTrigger>
+                    <div onClick={() => setIsOpen(true)}>
+                        {children}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent><p>Update Line</p></TooltipContent>
+            </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>

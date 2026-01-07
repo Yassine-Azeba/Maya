@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from "react"
 import CreateLineForm from "../forms/create-line"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 
 interface CreateLineButtonProps {
@@ -20,9 +21,14 @@ export default function CreateLineButton({planeId,userId,lines,children}:CreateL
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
-            <div onClick={() => setIsOpen(true)}>
-                {children}
-            </div>
+            <Tooltip>
+                <TooltipTrigger>
+                    <div onClick={() => setIsOpen(true)}>
+                        {children}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent><p>Create Line</p></TooltipContent>
+            </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>

@@ -86,7 +86,7 @@ Each Nest is configured with multiple nested Branches and contains Nodes linked 
     - defaultValue ?
     - validationRules ? => (v2)
 
-
+TODO : handle duplicate lines and duplicate custom attributs
 
 Features to come :
 - Views/Tools for planes or individual line

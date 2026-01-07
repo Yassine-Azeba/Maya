@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { DeleteLine } from "@/data/lines"
 import { useRouter } from "next/navigation"
 import { Trash2, TriangleAlert } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { FlipButton, FlipButtonBack, FlipButtonFront } from "../animate-ui/components/buttons/flip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 
@@ -16,9 +17,14 @@ export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps
     const router = useRouter()
     return(
         <div>
-            <div onClick={() => setIsOpen(true)}>
-                {children}
-            </div>
+            <Tooltip>
+                <TooltipTrigger>
+                    <div onClick={() => setIsOpen(true)}>
+                        {children}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent><p>Delete Line</p></TooltipContent>
+            </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
