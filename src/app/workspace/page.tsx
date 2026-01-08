@@ -10,16 +10,19 @@ import CreateLineButton from "@/components/buttons/create-line"
 import CreatePlaneButton from "@/components/buttons/create-plane"
 import UpdatePlaneButton from "@/components/buttons/update-plane"
 import DeletePlaneButton from "@/components/buttons/delete-plane"
-import { ArrowUpRight, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucide-react"
+import { ArrowUpRight, Braces, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucide-react"
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
+import CustomAttributsButton from "@/components/buttons/custom-attributs"
+import { GetCustomAttributs } from "@/data/custom-attributs"
 
 export default async function Workspace(){
     const session = await getSession()
     const user = await GetUser({email:session?.user?.email!})
     const planes = await GetPlanes({userId:user.data![0].id})
     const lines = await GetLines({userId:user.data![0].id})
+    const customAttributs = await GetCustomAttributs({userId:user.data![0].id})
     return(
         <div className="w-full h-full">
             {(planes.data && planes.data.length>0)?<div className="w-full h-full p-2">
@@ -33,6 +36,7 @@ export default async function Workspace(){
                         <TabsContents>
                             {planes.data.map(plane => {
                                 const planeLines = lines.data?.filter(line => line.plane === plane.planeId)
+                                const planecustomAttributs = customAttributs.data?.filter(attribut => attribut.plane === plane.planeId)
                                 return(
                                     <TabsContent className="flex flex-col gap-2" key={plane.name} value={plane.name}>
                                         <CardHeader>
@@ -51,7 +55,12 @@ export default async function Workspace(){
                                                     <div className="text-muted-foreground"><Edit2 size={10}/></div>
                                                 </UpdatePlaneButton>
                                             </div>
-                                            <CardAction>
+                                            <CardAction className="flex gap-2">
+                                                <CustomAttributsButton userId={user.data![0].id} planeId={plane.planeId} customAttributs={planecustomAttributs} object="Plane">
+                                                    <Button variant={"outline"} size={"icon-sm"}>
+                                                        <Braces />
+                                                    </Button>
+                                                </CustomAttributsButton>
                                                 <CreateLineButton planeId={plane.planeId} lines={planeLines} userId={user.data![0].id}>
                                                     <Button variant={"outline"} size={"icon-sm"}>
                                                         <Plus />

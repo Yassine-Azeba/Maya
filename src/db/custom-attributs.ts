@@ -6,7 +6,12 @@ import { boolean, pgEnum, pgTable, text } from "drizzle-orm/pg-core"
 export const customAttributTypes = pgEnum("custom_attribut_types",[
     "string",
     "number",
+    "date",
     "boolean",
+    "email",
+    "url",
+    "phone",
+    "line",
 ])
 export const customAttributs = pgTable("custom_attributs", { 
     customAttributId : text("custom_attributs_id").primaryKey().$defaultFn(() => crypto.randomUUID()),

@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form"
 import { CreatePlane } from "@/data/planes"
 import { useRouter } from "next/navigation"
 import { Dispatch, SetStateAction } from "react"
+import { RainbowButton } from "../ui/rainbow-button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { RainbowButton } from "../ui/rainbow-button"
 
 const formSchema = z.object({
   name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),

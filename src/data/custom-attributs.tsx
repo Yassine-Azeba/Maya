@@ -59,7 +59,7 @@ export async function GetCustomAttributs({customAttributId,userId,lineId,planeId
 // ✅✅ Create
 interface CreateCustomAttributsProps {
     name: string,
-    type : "string" | "number" | "boolean",
+    type : "string"|"number"|"date"|"boolean"|"email"|"url"|"phone"|"line",
 
     userId : string,
     planeId : string,
@@ -78,20 +78,21 @@ export async function CreateCustomAttribut({name,type,userId,planeId,lineId,appl
     if(!user || user.success === false || !user.data) return {success: false, message: "User doesn't exist.", data: null}
     const plane = await GetPlanes({planeId:planeId})
     if(!plane || plane.success === false || !plane.data) return {success: false, message: "Plane doesn't exist.", data: null}
-    const line = await GetLines({lineId:lineId})
-    if(!line || line.success === false || !line.data) return {success: false, message: "Line doesn't exist.", data: null}
+    if(lineId){
+        const line = await GetLines({lineId:lineId})
+        if(!line || line.success === false || !line.data) return {success: false, message: "Line doesn't exist.", data: null}
+    }
     try {
         const result = await db.insert(customAttributs).values({
             name : name,
             type : type,
             userId : userId,
             plane : planeId,
-            line : lineId,
+            line : lineId?lineId:null,
             appliesToChildrens : appliesToChildren,
             requiredForChildrens : requiredForChildren,
             defaultValue : defaultValue
-
-        })
+        }).returning()
         return {success: true, message: "Attribut created successfully.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
@@ -126,6 +127,7 @@ export async function UpdateCustomAttributs({customAttributId,name,type,lineId,a
             requiredForChildrens : requiredForChildren?requiredForChildren:attribut.data[0].requiredForChildrens,
             defaultValue : defaultValue?defaultValue:attribut.data[0].defaultValue,
         }).where(eq(customAttributs.customAttributId,customAttributId)).returning()
+        return {success: true, message: "Attribut successfully updated.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
             return {success: false, message: error.message, data: null}

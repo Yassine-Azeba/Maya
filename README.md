@@ -86,7 +86,23 @@ Each Nest is configured with multiple nested Branches and contains Nodes linked 
     - defaultValue ?
     - validationRules ? => (v2)
 
-TODO : handle duplicate lines and duplicate custom attributs
+TODO : 
+- P1 : /data : change returns {success : false} => throw new Error(message)
+- P2 : handle duplicate lines and duplicate custom attributs
+- P3 : Change /Button folder => /Dialog Folder
+
+Custom Attributs values 
+    - Text
+    - number
+    - date
+    - boolean
+    - email
+    - url
+    - phone number
+    - selection
+        - line
+        - user (v2)
+
 
 Features to come :
 - Views/Tools for planes or individual line
