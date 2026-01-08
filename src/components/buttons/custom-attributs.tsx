@@ -16,7 +16,7 @@ interface CustomAttributsButtonProps {
     customAttributs : {
         customAttributId: string;
         name: string;
-        type: "string" | "number" | "boolean" | "date" | null;
+        type: "string" | "number" | "boolean" | "date" | "email" | "url" | "phone" | "line" | null;
         plane: string;
         line: string | null;
         userId: string;

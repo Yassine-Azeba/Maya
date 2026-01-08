@@ -12,14 +12,12 @@ interface CreatePlaneProps {
     description?:string
 }
 export async function CreatePlane({userId,name,description}:CreatePlaneProps) {
-    if(!userId || !name) return {success: false, message: "Invalid inputs.", data: null}
-    // Check if user exist
     const user = await GetUser({userId:userId})
-    if(!user || user.success === false || !user.data) return {success: false, message: "Invalid user.", data: null}
+    if(!user || user.success === false || !user.data) throw new Error("Invalid user.")
     const plane = await GetPlanes({userId:userId})
     // Check if plane already exist (name is unique)
     const filteredPlane = plane.data?.filter(plane => plane.name === name)
-    if(filteredPlane && filteredPlane.length > 0) return {success: false, message: "Plane already exist.", data: null}
+    if(filteredPlane && filteredPlane.length > 0) throw new Error("Another plane already have this name.")
     try{
         const result = await db.insert(planes).values({
             name: name,
@@ -29,9 +27,9 @@ export async function CreatePlane({userId,name,description}:CreatePlaneProps) {
         return {success: true, message: "Plane created successfully.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -44,7 +42,7 @@ interface GetPlanesProps {
 }
 export async function GetPlanes({planeId,name,userId}:GetPlanesProps) {
     const props = [planeId,name,userId].filter((p) => p !== undefined)
-    if(props.length !== 1) return {success: false, message: "Please provide only one parameter.", data: null}
+    if(props.length !== 1) throw new Error("Please provide only one parameter.")
     try{
         if(planeId){ // Case 1 : Retrieve plane by id
             const result = await db.select().from(planes).where(eq(planes.planeId,planeId))
@@ -58,12 +56,12 @@ export async function GetPlanes({planeId,name,userId}:GetPlanesProps) {
             const result = await db.select().from(planes).where(eq(planes.userId,userId))
             return {success: true, message: "Plane(s) successfully retrieved.", data: result}
         }
-        return {success: false, message: "Unexpected error occured.", data: null}
+        throw new Error("Unexpected error occured.")
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -76,11 +74,10 @@ interface UpdatePlaneProps {
 }
 export async function UpdatePlane({planeId,name,description}:UpdatePlaneProps) {
     const plane = await GetPlanes({planeId:planeId})
-    if(!plane || plane.success === false || !plane.data) return {success: false, message: "Plane does not exist.", data: null} 
-    // if name is updated, check if another plane don't already have the same name
+    if(!plane || plane.success === false || !plane.data) throw new Error("Plane does not exist.")
     if(name){
         const filteredPlane = plane.data?.filter(plane => plane.name === name && plane.planeId !== planeId)
-        if(filteredPlane && filteredPlane.length > 0) return {success: false, message: "Another plane already have the same name.", data: null}
+        if(filteredPlane && filteredPlane.length > 0) throw new Error("Another plane already have the same name.")
     }
     try {
         const result = await db.update(planes).set({
@@ -90,9 +87,9 @@ export async function UpdatePlane({planeId,name,description}:UpdatePlaneProps) {
         return {success: true, message: "Plane successfully updated.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -107,9 +104,9 @@ export async function DeletePlane({planeId}:DeletePlaneProps) {
         return {success: true, message: "Plane successfully deleted.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }

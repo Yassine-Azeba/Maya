@@ -87,7 +87,8 @@ Each Nest is configured with multiple nested Branches and contains Nodes linked 
     - validationRules ? => (v2)
 
 TODO : 
-- P1 : /data : change returns {success : false} => throw new Error(message)
+- P0 : Update/Delete Custom Attributs
+- P1 : /data : change returns {success : false} => throw new Error(message) => DONE
 - P2 : handle duplicate lines and duplicate custom attributs
 - P3 : Change /Button folder => /Dialog Folder
 

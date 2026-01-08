@@ -16,14 +16,14 @@ interface CreateLineProps {
 }
 export async function CreateLine({name,description,userId,planeId,parentId}:CreateLineProps) {
     const plane = await GetPlanes({planeId:planeId})
-    if(!plane || plane.success === false || !plane.data) return {success: false, message: "Can't find plane.", data: null}
+    if(!plane || plane.success === false || !plane.data) throw new Error("Can't find plane.")
     const user = await GetUser({userId:userId})
-    if(!user || user.success === false || !user.data) return {success: false, message: "Can't find user.", data: null}
+    if(!user || user.success === false || !user.data) throw new Error("Can't find user.")
 
     if(parentId){
         const parent = await GetLines({lineId:parentId})
-        if(!parent || parent.success === false || !parent.data) return {success: false, message: "Can't find parent.", data: null}
-        if(parent.data[0].plane !== planeId) return {success: false, message: "Parent is from another plane.", data: null}
+        if(!parent || parent.success === false || !parent.data) throw new Error("Can't find parent.")
+        if(parent.data[0].plane !== planeId) throw new Error("Parent is from another plane.")
     }
     try{
         const result = await db.insert(lines).values({
@@ -36,9 +36,9 @@ export async function CreateLine({name,description,userId,planeId,parentId}:Crea
         return {success: true, message: "Line created successfully.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -53,17 +53,17 @@ interface GetLinesProps {
 export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
     // Only one props should be used to retrieve an line (either user, space, line or name)
     const props = [userId,lineId,planeId,name].filter((p) => p !== undefined)
-    if(props.length !== 1 ) return {success: false, message: "Invalid inputs.", data: null}
+    if(props.length !== 1 ) throw new Error("Invalid inputs.")
     try {
         if(userId){
             const user = await GetUser({userId:userId})
-            if(!user || user.success === false || !user.data) return {success: false, message: "User doesn't exist.", data: null}
+            if(!user || user.success === false || !user.data) throw new Error("User doesn't exist.")
             const result = await db.select().from(lines).where(eq(lines.userId,userId))
             return {success: true, message: "Line(s) successfully retrieved.", data: result}
         }
         if(planeId){
             const plane = await GetPlanes({planeId:planeId})
-            if(!plane || plane.success === false || !plane.data) return {success: false, message: "Plane doesn't exist.", data: null}
+            if(!plane || plane.success === false || !plane.data) throw new Error("Plane doesn't exist.")
             const result = await db.select().from(lines).where(eq(lines.plane,planeId))
             return {success: true, message: "Line(s) successfully retrieved.", data: result}
         }
@@ -75,12 +75,12 @@ export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
             const result = await db.select().from(lines).where(eq(lines.name,name))
             return {success: true, message: "Line(s) successfully retrieved.", data: result}
         }
-        return {success: false,message: "Unknown error occured.", data: null}
+        throw new Error("Unknown error occured.")
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -156,21 +156,21 @@ interface UpdateLineProps {
 }
 export async function UpdateLine({lineId,name,description,parentId}:UpdateLineProps){
     const line = await GetLines({lineId:lineId})
-    if(!line || line.success === false || !line.data) return {success: false, message: "Line does not exist.", data: null} 
+    if(!line || line.success === false || !line.data) throw new Error("Line does not exist.")
     
     if(parentId){
         // Does parent exist ?
         const parent = await GetLines({lineId:parentId})
-        if(!parent || parent.success === false || !parent.data) return {success: false, message: "Can't find parent.", data: null}
+        if(!parent || parent.success === false || !parent.data) throw new Error("Can't find parent.")
         // is parent same as line ?
         const isParentLineIsLine = await isParentLineSameAsLine({parentLineId:parentId,lineId:lineId})
-        if(!isParentLineIsLine.success) return {success: false, message: isParentLineIsLine.message, data: null}
+        if(!isParentLineIsLine.success) throw new Error(isParentLineIsLine.message)
         // is parent from same plane ?
         const isParentFromSamePlane = await AreLineFromSamePlane({lineIdA:lineId,lineIdB:parentId})
-        if(!isParentFromSamePlane.success) return {success: false, message: isParentFromSamePlane.message, data: null}
+        if(!isParentFromSamePlane.success) throw new Error(isParentFromSamePlane.message)
         // is parent above ?
         const isParentAbove = await IsParent({lineId:parentId,parentlineId:lineId})
-        if(isParentAbove.success) return {success: false, message: "The parent you provide is a child of the line you are updating.", data: null}
+        if(isParentAbove.success) throw new Error("The parent you provide is a child of the line you are updating.")
     }
     try{
         const result = await db.update(lines).set({
@@ -181,9 +181,9 @@ export async function UpdateLine({lineId,name,description,parentId}:UpdateLinePr
         return {success: true, message: "Line updated successfully.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
@@ -195,14 +195,13 @@ interface DeleteLineProps {
 }
 export async function DeleteLine({lineId}:DeleteLineProps) {
     try {
-        const result = await db.delete(lines).where(eq(lines.lineId,lineId))
-        if(result.rowCount === 1) return {success: true, message: "Line deleted successfully.", data: null}
-        else return {success: false, message: "Can't delete line. Please try again.", data: null}
+        const result = await db.delete(lines).where(eq(lines.lineId,lineId)).returning()
+        return {success: true, message: "Line successfully deleted.", data: result}
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }

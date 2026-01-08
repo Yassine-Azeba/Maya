@@ -10,9 +10,9 @@ interface GetUserByIdProps {
     email?:string
 }
 export async function GetUser({userId,email}:GetUserByIdProps) {
-    if(!userId && !email) return {success: false, message: "Provide at least one prop.", data: null}
+    if(!userId && !email) throw new Error("Provide at least one prop.")
     try {
-        if(userId && email) return {success: false, message: "Only one prop is required.", data: null}
+        if(userId && email) throw new Error("Only one prop is required.")
         if(userId) {
             const result = await db.select().from(users).where(eq(users.id,userId))
             return {success: true, message: "User retrieved.", data: result}
@@ -21,12 +21,12 @@ export async function GetUser({userId,email}:GetUserByIdProps) {
             const result = await db.select().from(users).where(eq(users.email,email))
             return {success: true, message: "User retrieved.", data: result}
         }
-        return {success: false, message: "Unknown error occured.", data: null}
+        throw new Error("Unknown error occured.")
     } catch (error) {
         if(error instanceof DrizzleQueryError){
-            return {success: false, message: error.message, data: null}
+            throw new Error(error.message)
         } else {
-            return {success: false, message: "Unknown error occured. Please try again.", data: null}
+            throw new Error("Unknown error occured. Please try again.")
         }
     }
 }
