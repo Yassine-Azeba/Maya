@@ -2,20 +2,17 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { getSession } from "@/lib/nextauth"
 import { Toaster } from "@/components/ui/sonner"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Chakra_Petch } from "next/font/google"
 import AuthProvider from "@/components/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip"
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const chakraPatch = Chakra_Petch({
 	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
+	weight : ["300","400","500","600","700"],
+	display: "swap",
+	variable : "--font-chakra-petch"
+})
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -25,10 +22,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
 	const session = await getSession()
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+		<html suppressHydrationWarning>
+			<body className={`${chakraPatch.variable} font-chakra`}>
 				<AuthProvider session={session}>
-					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+					<ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
 						<TooltipProvider>
 							{children}
 						</TooltipProvider>

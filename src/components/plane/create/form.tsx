@@ -1,15 +1,15 @@
 "use client"
 import { z } from "zod"
 import { toast } from "sonner"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
 import { useForm } from "react-hook-form"
 import { CreatePlane } from "@/data/planes"
 import { useRouter } from "next/navigation"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import { Dispatch, SetStateAction } from "react"
-import { RainbowButton } from "../ui/rainbow-button"
+import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 const formSchema = z.object({
   name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),
@@ -59,7 +59,7 @@ export default function CreatePlaneForm({userId,setDialogOpen}:CreatePlaneForm){
                         <FormMessage />
                     </FormItem>
                 )}/>
-                <RainbowButton type="submit" className="mt-2">Submit</RainbowButton>
+                <Button type="submit" className="mt-2">Create</Button>
             </form>
         </Form>
     )

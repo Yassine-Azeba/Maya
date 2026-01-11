@@ -1,103 +1,38 @@
 import Link from "next/link"
-import List from "@/components/list"
 import { GetUser } from "@/data/user"
-import { GetLines } from "@/data/lines"
+import { Layers } from "lucide-react"
 import { GetPlanes } from "@/data/planes"
 import { getSession } from "@/lib/nextauth"
 import { Button } from "@/components/ui/button"
-import CreatePlaneForm from "@/components/forms/create-plane"
-import CreateLineButton from "@/components/buttons/create-line"
-import CreatePlaneButton from "@/components/buttons/create-plane"
-import UpdatePlaneButton from "@/components/buttons/update-plane"
-import DeletePlaneButton from "@/components/buttons/delete-plane"
-import { ArrowUpRight, Braces, Edit2, LayersPlus, Plus, SquarePlus, Trash2 } from "lucide-react"
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
-import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
-import CustomAttributsButton from "@/components/buttons/custom-attributs"
-import { GetCustomAttributs } from "@/data/custom-attributs"
+import WorkspaceComponent from "@/components/workspace"
+import CreatePlaneButton from "@/components/plane/create/dialog"
+import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 
 export default async function Workspace(){
     const session = await getSession()
     const user = await GetUser({email:session?.user?.email!})
     const planes = await GetPlanes({userId:user.data![0].id})
-    const lines = await GetLines({userId:user.data![0].id})
-    const customAttributs = await GetCustomAttributs({userId:user.data![0].id})
     return(
         <div className="w-full h-full">
-            {(planes.data && planes.data.length>0)?<div className="w-full h-full p-2">
-                <Tabs defaultValue={planes.data[0].name}>
-                    <TabsList>
-                        {/* TODO : overflow when too much tabs */}
-                        {planes.data.map(plane => <TabsTrigger key={plane.name} value={plane.name}>{plane.name}</TabsTrigger>)}
-                        <TabsTrigger value={"New Plane"}><SquarePlus /></TabsTrigger>
-                    </TabsList>
-                    <Card>
-                        <TabsContents>
-                            {planes.data.map(plane => {
-                                const planeLines = lines.data?.filter(line => line.plane === plane.planeId)
-                                const planecustomAttributs = customAttributs.data?.filter(attribut => attribut.plane === plane.planeId)
-                                return(
-                                    <TabsContent className="flex flex-col gap-2" key={plane.name} value={plane.name}>
-                                        <CardHeader>
-                                            <div className="flex items-center gap-2">
-                                                <CardTitle className="text-sm">{plane.name}</CardTitle>
-                                                <UpdatePlaneButton userId={user.data![0].id} plane={plane}>
-                                                    <Edit2 size={12}/>
-                                                </UpdatePlaneButton>
-                                                <DeletePlaneButton planeId={plane.planeId}>
-                                                    <Trash2 size={12}/>
-                                                </DeletePlaneButton>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <CardDescription className="text-xs">{plane.description}</CardDescription>
-                                                <UpdatePlaneButton userId={user.data![0].id} descriptionOnly plane={plane}>
-                                                    <div className="text-muted-foreground"><Edit2 size={10}/></div>
-                                                </UpdatePlaneButton>
-                                            </div>
-                                            <CardAction className="flex gap-2">
-                                                <CustomAttributsButton userId={user.data![0].id} planeId={plane.planeId} customAttributs={planecustomAttributs} object="Plane">
-                                                    <Button variant={"outline"} size={"icon-sm"}>
-                                                        <Braces />
-                                                    </Button>
-                                                </CustomAttributsButton>
-                                                <CreateLineButton planeId={plane.planeId} lines={planeLines} userId={user.data![0].id}>
-                                                    <Button variant={"outline"} size={"icon-sm"}>
-                                                        <Plus />
-                                                    </Button>
-                                                </CreateLineButton>
-                                            </CardAction>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <List planeId={plane.planeId} userId={user.data![0].id} lines={planeLines}/>
-                                        </CardContent>
-                                    </TabsContent>
-                                )})
-                            }
-                            <TabsContent className="p-28" value="New Plane">
-                                <CreatePlaneForm userId={user.data![0].id}/>
-                            </TabsContent>
-                        </TabsContents>
-                    </Card>
-                </Tabs>
-            </div>:<div className="w-full h-full flex items-center justify-center pb-10">
-                <Empty>
-                    <EmptyHeader>
-                        <EmptyMedia variant={"icon"}>
-                            <LayersPlus />
-                        </EmptyMedia>
-                        <EmptyTitle>No Plane Yet</EmptyTitle>
-                        <EmptyDescription>You haven't created a plane yet. Get started by creating your first plane.</EmptyDescription>
-                    </EmptyHeader>
-                    <EmptyContent>
-                        <CreatePlaneButton userId={user.data![0].id}>
-                            <Button className="h-8 w-full flex items-center gap-4">New plane <LayersPlus size={12}/></Button>
-                        </CreatePlaneButton>
-                    </EmptyContent>
-                    <Button variant={"link"} className="text-muted-foreground">
-                        <Link href={"/help"} className="flex items-center">Get help<ArrowUpRight className="pt-0.5" /></Link>
-                    </Button>
-                </Empty>
+            {(planes.data && planes.data.length>0)?
+            <WorkspaceComponent userId={user.data![0].id} planes={planes.data}/>:
+            <div className="h-full w-full relative antialiased">
+                <div className="w-full h-full flex justify-center items-center flex-col gap-2 relative z-10">
+                    <div className="w-24 h-24 rounded-full border bg-gray-300/35 flex items-center justify-center text-muted-foreground">
+                        <Layers size={38}/>
+                    </div>
+                    <h1 className="text-xl">Nothing here yet.</h1>
+                    <h1 className="text-muted-foreground text-sm">Planes help you organize your work by grouping related lines under one subject.</h1>
+                    <div className="flex items-center gap-1 text-muted-foreground text-sm">
+                        <h1>Check the </h1>
+                        <Link className="text-orange-400 underline" href={"/help"}>/help</Link>
+                        <h1>page if you feel lost.</h1>
+                    </div> 
+                    <CreatePlaneButton userId={user.data![0].id}>
+                        <Button variant={"outline"}>Create your first plane</Button>
+                    </CreatePlaneButton>
+                </div>
+                <BackgroundBeams />
             </div>}
         </div>
     )

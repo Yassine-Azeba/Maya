@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from "react"
-import CreatePlaneForm from "../forms/create-plane"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
-import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
+import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
+import CreatePlaneForm from "./form"
 interface CreatePlaneButtonProps {
     userId : string,
     children : React.ReactNode

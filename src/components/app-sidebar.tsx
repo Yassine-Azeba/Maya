@@ -5,9 +5,9 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./animate-ui/primitives/radix/collapsible"
+import { BellDot, ChevronRight, ChevronsUpDown, CircleDot, CircleQuestionMark, CircleUserRound, Layers, LayoutDashboard, LogOut, Settings } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./animate-ui/components/radix/dropdown-menu"
-import { BellDot, Calendar, Calendars, ChevronRight, ChevronsUpDown, CircleAlert, CircleDot, CircleQuestionMark, CircleUserRound, Focus, GanttChart, Handshake, Kanban, Layers, LayoutDashboard, Link2, ListTodo, LogOut, MessageSquareDot, PieChart, Settings, TriangleAlert } from "lucide-react"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, useSidebar } from "./animate-ui/components/radix/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./animate-ui/components/radix/sidebar"
 
 interface AppSidebarProps {
     type : "workspace_sidebar" | "plane_sidebar" | "line_sidebar" | "tool_sidebar",
@@ -51,7 +51,7 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
 								</SidebarMenuButton>
 							</Link>
 						</SidebarMenuItem>
-                        <Collapsible asChild className="group/collapsible">
+                        <Collapsible asChild defaultOpen className="group/collapsible">
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton tooltip={"Planes"}>
