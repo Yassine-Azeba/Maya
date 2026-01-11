@@ -24,27 +24,27 @@ export async function GetCustomAttributs({customAttributId,userId,lineId,planeId
             const user = await GetUser({userId:userId})
             if(!user || user.success === false || !user.data) throw new Error("User doesn't exist.")
             const result = await db.select().from(customAttributs).where(eq(customAttributs.userId,userId))
-            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+            return {success: true, message: "Attribut successfully retrieved.", data: result}
         }
         if(planeId){
             const plane = await GetPlanes({planeId:planeId})
             if(!plane || plane.success === false || !plane.data) throw new Error("Plane doesn't exist.")
             const result = await db.select().from(customAttributs).where(eq(customAttributs.plane,planeId))
-            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+            return {success: true, message: "Attribut successfully retrieved.", data: result}
         }
         if(lineId){
             const line = await GetLines({lineId:lineId})
             if(!line || line.success === false || !line.data) throw new Error("Line doesn't exist.")
             const result = await db.select().from(customAttributs).where(eq(customAttributs.line,lineId))
-            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+            return {success: true, message: "Attribut successfully retrieved.", data: result}
         }
         if(name){
             const result = await db.select().from(customAttributs).where(eq(customAttributs.name,name))
-            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+            return {success: true, message: "Attribut successfully retrieved.", data: result}
         }
         if(customAttributId){
             const result = await db.select().from(customAttributs).where(eq(customAttributs.customAttributId,customAttributId))
-            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+            return {success: true, message: "Attribut successfully retrieved.", data: result}
         }
         throw new Error("Unknown error occured.")
     } catch (error) {
@@ -78,9 +78,23 @@ export async function CreateCustomAttribut({name,type,userId,planeId,lineId,appl
     if(!user || user.success === false || !user.data) throw new Error("User doesn't exist.")
     const plane = await GetPlanes({planeId:planeId})
     if(!plane || plane.success === false || !plane.data) throw new Error("Plane doesn't exist.")
+    // Check duplicate (plane level)
+    const planeCustomAttributs = await GetCustomAttributs({planeId:planeId})
+    const filteredPlaneCustomAttributs = planeCustomAttributs.data.filter(attribut => attribut.name === name)
+    if(filteredPlaneCustomAttributs.length > 0) throw new Error("This attribut already exist in plane's configuration.")
     if(lineId){
         const line = await GetLines({lineId:lineId})
         if(!line || line.success === false || !line.data) throw new Error("Line doesn't exist.")
+        // Check duplicates (line level - same line)
+        const lineCustomAttributs = await GetCustomAttributs({lineId:lineId})
+        const filteredLineCustomAttributs = lineCustomAttributs.data.filter(attribut => attribut.name === name)
+        if(filteredLineCustomAttributs.length > 0) throw new Error("This attribut already exist for this line.")
+        // Check duplicate (line level - parent line + assignedToChildren)
+        if(line.data[0].parent){
+            const parentLineCustomAttributs = await GetCustomAttributs({lineId:line.data[0].parent})
+            const filteredParentLineCustomAttributs = parentLineCustomAttributs.data.filter(attribut => attribut.name === name && appliesToChildren)
+            if(filteredParentLineCustomAttributs.length > 0) throw new Error("This attribut already exist (inherited from parent line).")
+        }
     }
     try {
         const result = await db.insert(customAttributs).values({
@@ -118,6 +132,24 @@ interface UpdateCustomAttributProps {
 export async function UpdateCustomAttributs({customAttributId,name,type,lineId,appliesToChildren,requiredForChildren,defaultValue}:UpdateCustomAttributProps) {
     const attribut = await GetCustomAttributs({customAttributId : customAttributId})
     if(!attribut || attribut.success === false || !attribut.data) throw new Error("Attribut doesn't exist.")
+    // Check duplicate (plane level)
+    const planeCustomAttributs = await GetCustomAttributs({planeId:attribut.data[0].plane})
+    const filteredPlaneCustomAttributs = planeCustomAttributs.data.filter(attribut => attribut.name === name)
+    if(filteredPlaneCustomAttributs.length > 0) throw new Error("This attribut already exist in plane's configuration.")
+    if(lineId){
+        const line = await GetLines({lineId:lineId})
+        if(!line || line.success === false || !line.data) throw new Error("Line doesn't exist.")
+        // Check duplicates (line level - same line)
+        const lineCustomAttributs = await GetCustomAttributs({lineId:lineId})
+        const filteredLineCustomAttributs = lineCustomAttributs.data.filter(attribut => attribut.name === name)
+        if(filteredLineCustomAttributs.length > 0) throw new Error("This attribut already exist for this line.")
+        // Check duplicate (line level - parent line + assignedToChildren)
+        if(line.data[0].parent){
+            const parentLineCustomAttributs = await GetCustomAttributs({lineId:line.data[0].parent})
+            const filteredParentLineCustomAttributs = parentLineCustomAttributs.data.filter(attribut => attribut.name === name && appliesToChildren)
+            if(filteredParentLineCustomAttributs.length > 0) throw new Error("This attribut already exist (inherited from parent line).")
+        }
+    }
     try{
         const result = await db.update(customAttributs).set({
             name : name?name:attribut.data[0].name,

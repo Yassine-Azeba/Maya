@@ -68,13 +68,18 @@ export async function GetPlanes({planeId,name,userId}:GetPlanesProps) {
 
 // ✅✅ Update
 interface UpdatePlaneProps {
+    userId : string,
     planeId:string,
     name?:string,
     description?:string
 }
-export async function UpdatePlane({planeId,name,description}:UpdatePlaneProps) {
+export async function UpdatePlane({userId,planeId,name,description}:UpdatePlaneProps) {
     const plane = await GetPlanes({planeId:planeId})
     if(!plane || plane.success === false || !plane.data) throw new Error("Plane does not exist.")
+    // Check if plane already exist (name is unique)
+    const allPlane = await GetPlanes({userId:userId})
+    const filteredPlane = allPlane.data?.filter(plane => plane.name === name)
+    if(filteredPlane && filteredPlane.length > 0) throw new Error("Another plane already have this name.")
     if(name){
         const filteredPlane = plane.data?.filter(plane => plane.name === name && plane.planeId !== planeId)
         if(filteredPlane && filteredPlane.length > 0) throw new Error("Another plane already have the same name.")

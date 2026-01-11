@@ -37,7 +37,7 @@ export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonPr
                         toast.promise(DeletePlane({planeId:planeId}), {
                             loading: "Loading ...",
                             success: (data) => `${data.message}`,
-                            error: "Something wrong happened ..."
+                            error: (data) => `${data.message}`
                         })
                         router.refresh()
                     }}>

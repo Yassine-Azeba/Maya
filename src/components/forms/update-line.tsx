@@ -47,11 +47,12 @@ export default function UpdateLineForm({lineId,lines,setDialogOpen}:UpdateLineFo
             toast.promise(UpdateLine({
                 lineId:lineId,
                 name:values.name,
-                description:values.description
+                description:values.description,
+                parentId : parent
             }),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }

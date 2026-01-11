@@ -4,6 +4,7 @@ import UpdatePlaneForm from "../forms/update-plane"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "../animate-ui/components/headless/dialog"
 interface UpdatePlaneButtonProps {
+    userId : string,
     plane : {
         planeId: string,
         name : string,
@@ -13,7 +14,7 @@ interface UpdatePlaneButtonProps {
     descriptionOnly? : boolean,
     children : React.ReactNode
 }
-export default function UpdatePlaneButton({plane,descriptionOnly,children}:UpdatePlaneButtonProps){
+export default function UpdatePlaneButton({userId,plane,descriptionOnly,children}:UpdatePlaneButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
@@ -30,7 +31,7 @@ export default function UpdatePlaneButton({plane,descriptionOnly,children}:Updat
                     <DialogHeader>
                         <DialogTitle>Update Plane</DialogTitle>
                     </DialogHeader>
-                    <UpdatePlaneForm plane={plane} descriptionOnly={descriptionOnly} setDialogOpen={setIsOpen}/>
+                    <UpdatePlaneForm userId={userId} plane={plane} descriptionOnly={descriptionOnly} setDialogOpen={setIsOpen}/>
                 </DialogPanel>
             </Dialog>
         </div>

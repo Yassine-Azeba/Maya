@@ -34,7 +34,7 @@ export default function CreatePlaneForm({userId,setDialogOpen}:CreatePlaneForm){
         toast.promise(CreatePlane({userId:userId,name:values.name,description:values.description}),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }

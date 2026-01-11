@@ -46,7 +46,7 @@ export default function CreateLineForm({planeId,userId,lines,setIsOpen}:CreateLi
         toast.promise(CreateLine({planeId:planeId,userId:userId,name:values.name,description:values.description?values.description:"",parentId:parent}),{
             loading : "Loading ...",
             success : (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }
@@ -57,7 +57,7 @@ export default function CreateLineForm({planeId,userId,lines,setIsOpen}:CreateLi
                     <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                            <Input placeholder="Plane name" {...field}/>
+                            <Input placeholder="Line name" {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>

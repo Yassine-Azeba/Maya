@@ -20,6 +20,7 @@ const formSchemaDesriptionOnly = z.object({
 })
 
 interface UpdatePlaneFormProps {
+    userId : string,
     plane : {
         planeId: string,
         name : string,
@@ -29,7 +30,7 @@ interface UpdatePlaneFormProps {
     descriptionOnly? : boolean,
     setDialogOpen? : Dispatch<SetStateAction<boolean>>
 }
-export default function UpdatePlaneForm({plane,descriptionOnly,setDialogOpen}:UpdatePlaneFormProps){
+export default function UpdatePlaneForm({userId,plane,descriptionOnly,setDialogOpen}:UpdatePlaneFormProps){
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
@@ -41,12 +42,13 @@ export default function UpdatePlaneForm({plane,descriptionOnly,setDialogOpen}:Up
     function onSubmit(values : z.infer<typeof formSchema>){
         if(setDialogOpen) setDialogOpen(false)
             toast.promise(UpdatePlane({
+                userId:userId,
                 planeId:plane.planeId,
                 name:values.name,
                 description:values.description}),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }
@@ -59,10 +61,14 @@ export default function UpdatePlaneForm({plane,descriptionOnly,setDialogOpen}:Up
     })
     function onSubmitDescriptionOnly(values : z.infer<typeof formSchemaDesriptionOnly>){
         if(setDialogOpen) setDialogOpen(false)
-        toast.promise(UpdatePlane({planeId:plane.planeId,description:values.description}),{
+        toast.promise(UpdatePlane({
+            userId:userId,
+            planeId:plane.planeId,
+            description:values.description
+        }),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }

@@ -72,7 +72,7 @@ export default function CreateCustomAttributsForm({userId,planeId,setDialogOpen}
         }),{
             loading: "Loading ...",
             success: (data) => `${data.message}`,
-            error: "Something wrong happened ..."
+            error: (data) => `${data.message}`
         })
         router.refresh()
     }
@@ -119,7 +119,7 @@ export default function CreateCustomAttributsForm({userId,planeId,setDialogOpen}
                         Is Required for children ?
                     </Label>
                 </div>
-                {requiredForChildrens?<div className="flex flex-col gap-2">
+                {appliesToChildren?<div className="flex flex-col gap-2">
                     <h1 className="text-sm font-medium">Default Value</h1>
                     {
                         (type==="string")?<Textarea placeholder="Default Value" value={defaultValue} onChange={(e) => setDefaultValue(e.target.value)}/>:

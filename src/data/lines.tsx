@@ -19,11 +19,19 @@ export async function CreateLine({name,description,userId,planeId,parentId}:Crea
     if(!plane || plane.success === false || !plane.data) throw new Error("Can't find plane.")
     const user = await GetUser({userId:userId})
     if(!user || user.success === false || !user.data) throw new Error("Can't find user.")
-
     if(parentId){
         const parent = await GetLines({lineId:parentId})
         if(!parent || parent.success === false || !parent.data) throw new Error("Can't find parent.")
         if(parent.data[0].plane !== planeId) throw new Error("Parent is from another plane.")
+        // Check duplicates
+        const sameLevelLines = await GetLines({parentId:parentId})
+        const filteredSameLevelLines = sameLevelLines.data.filter(line => line.name === name)
+        if(filteredSameLevelLines.length > 0) throw new Error("Line already exist.")
+    } else {
+        // Check duplicate (top level)
+        const topLevelLines = await GetLines({userId:userId})
+        const filteredTopLevelLines = topLevelLines.data.filter(line => line.parent === null && line.name === name)
+        if(filteredTopLevelLines.length > 0) throw new Error("Line already exist.")
     }
     try{
         const result = await db.insert(lines).values({
@@ -48,11 +56,12 @@ interface GetLinesProps {
     userId? : string,
     lineId? : string,
     planeId? : string,
-    name? : string
+    name? : string,
+    parentId? : string
 }
-export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
-    // Only one props should be used to retrieve an line (either user, space, line or name)
-    const props = [userId,lineId,planeId,name].filter((p) => p !== undefined)
+export async function GetLines({userId,lineId,planeId,name,parentId}:GetLinesProps) {
+    // Only one props should be used to retrieve a line (either user, space, line or name)
+    const props = [userId,lineId,planeId,name,parentId].filter((p) => p !== undefined)
     if(props.length !== 1 ) throw new Error("Invalid inputs.")
     try {
         if(userId){
@@ -73,6 +82,10 @@ export async function GetLines({userId,lineId,planeId,name}:GetLinesProps) {
         }
         if(name){
             const result = await db.select().from(lines).where(eq(lines.name,name))
+            return {success: true, message: "Line(s) successfully retrieved.", data: result}
+        }
+        if(parentId){
+            const result = await db.select().from(lines).where(eq(lines.parent,parentId))
             return {success: true, message: "Line(s) successfully retrieved.", data: result}
         }
         throw new Error("Unknown error occured.")
@@ -171,6 +184,10 @@ export async function UpdateLine({lineId,name,description,parentId}:UpdateLinePr
         // is parent above ?
         const isParentAbove = await IsParent({lineId:parentId,parentlineId:lineId})
         if(isParentAbove.success) throw new Error("The parent you provide is a child of the line you are updating.")
+        // Check duplicates
+        const sameLevelLines = await GetLines({parentId:parentId})
+        const filteredSameLevelLines = sameLevelLines.data.filter(line => line.name === name)
+        if(filteredSameLevelLines.length > 0) throw new Error("Line already exist.")
     }
     try{
         const result = await db.update(lines).set({

@@ -42,7 +42,7 @@ export default async function Workspace(){
                                         <CardHeader>
                                             <div className="flex items-center gap-2">
                                                 <CardTitle className="text-sm">{plane.name}</CardTitle>
-                                                <UpdatePlaneButton plane={plane}>
+                                                <UpdatePlaneButton userId={user.data![0].id} plane={plane}>
                                                     <Edit2 size={12}/>
                                                 </UpdatePlaneButton>
                                                 <DeletePlaneButton planeId={plane.planeId}>
@@ -51,7 +51,7 @@ export default async function Workspace(){
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <CardDescription className="text-xs">{plane.description}</CardDescription>
-                                                <UpdatePlaneButton descriptionOnly plane={plane}>
+                                                <UpdatePlaneButton userId={user.data![0].id} descriptionOnly plane={plane}>
                                                     <div className="text-muted-foreground"><Edit2 size={10}/></div>
                                                 </UpdatePlaneButton>
                                             </div>

@@ -37,7 +37,7 @@ export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps
                         toast.promise(DeleteLine({lineId:lineId}), {
                             loading: "Loading ...",
                             success: (data) => `${data.message}`,
-                            error: "Something wrong happened ..."
+                            error: (data) => `${data.message}`
                         })
                         router.refresh()
                     }}>
