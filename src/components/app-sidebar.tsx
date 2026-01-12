@@ -1,6 +1,5 @@
 'use client'
 import Link from "next/link"
-import { useTheme } from "next-themes"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
@@ -10,19 +9,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./animate-ui/components/radix/sidebar"
 
 interface AppSidebarProps {
-    type : "workspace_sidebar" | "plane_sidebar" | "line_sidebar" | "tool_sidebar",
-    userId : string,
     planes? : {
-        planeId: string;
-        name: string;
-        description: string | null;
-        userId: string;
-    }[] | null
+		planeId: string;
+		name: string;
+		description: string | null;
+		icon: string;
+		lineCount: number;
+	}[]
 }
-export default function AppSidebar({type,userId,planes}:AppSidebarProps){
+export default function AppSidebar({planes}:AppSidebarProps){
     const {data:session, status} = useSession()
 	const isMobile = useIsMobile()
-	const { theme } = useTheme()
     return(
         <Sidebar variant="inset" collapsible="icon">
             {/* Header Title */}
@@ -41,7 +38,7 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
             {/* Content */}
             <SidebarContent className="scrollbar-hide">
                 {/* Plane/dot List */}
-                {(type==="workspace_sidebar")?<SidebarGroup>
+                <SidebarGroup>
                     <SidebarMenu>
 						<SidebarMenuItem>
 							<Link href={"/workspace"} className="w-full">
@@ -63,14 +60,14 @@ export default function AppSidebar({type,userId,planes}:AppSidebarProps){
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
                                         {planes?.map(plane => <SidebarMenuSubItem key={plane.planeId}>
-                                            <SidebarMenuSubButton className="truncate" href={`/planes/${plane.name}`}>{plane.name}</SidebarMenuSubButton>
+                                            <SidebarMenuSubButton className="truncate" href={`/planes/${plane.planeId}`}>{plane.name}</SidebarMenuSubButton>
                                         </SidebarMenuSubItem>)}
                                     </SidebarMenuSub>
                                 </CollapsibleContent>
                             </SidebarMenuItem>
                         </Collapsible>
                     </SidebarMenu>
-                </SidebarGroup>:<></>}
+                </SidebarGroup>
                 {/* Settings and Notification */}
                 <SidebarGroup className="mt-auto">
                     <SidebarGroupContent>

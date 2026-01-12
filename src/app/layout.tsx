@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { getSession } from "@/lib/nextauth"
 import { Toaster } from "@/components/ui/sonner"
 import { Chakra_Petch } from "next/font/google"
-import AuthProvider from "@/components/auth-provider"
+import AuthProvider from "@/components/auth/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip"
 

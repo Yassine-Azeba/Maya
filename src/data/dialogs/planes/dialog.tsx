@@ -2,12 +2,13 @@
 import React, { useState } from "react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
-import CreatePlaneForm from "./form"
+import CreatePlaneForm from "@/data/forms/planes/create"
+
 interface CreatePlaneButtonProps {
-    userId : string,
+    userEmail : string,
     children : React.ReactNode
 }
-export default function CreatePlaneButton({userId,children}:CreatePlaneButtonProps){
+export default function CreatePlaneButton({userEmail,children}:CreatePlaneButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
@@ -24,7 +25,7 @@ export default function CreatePlaneButton({userId,children}:CreatePlaneButtonPro
                     <DialogHeader>
                         <DialogTitle>New Plane</DialogTitle>
                     </DialogHeader>
-                    <CreatePlaneForm userId={userId} setDialogOpen={setIsOpen}/>
+                    <CreatePlaneForm userEmail={userEmail} setDialogOpen={setIsOpen}/>
                 </DialogPanel>
             </Dialog>
         </div>

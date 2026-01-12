@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { getSession } from "@/lib/nextauth"
 import { FlaskConical } from "lucide-react"
-import SignInButton from "@/components/signin-button"
+import SignInButton from "@/components/auth/signin-button"
 
 export default async function Home() {
 	const session = await getSession()
