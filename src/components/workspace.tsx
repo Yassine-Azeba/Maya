@@ -7,6 +7,7 @@ import { Separator } from "./ui/separator"
 import CreatePlaneButton from "../data/dialogs/planes/dialog"
 import { HexagonBackground } from "./ui/shadcn-io/hexagon-background"
 import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
+import { PlaneIcon } from "./icon-selector"
 
 interface WorkspaceProps {
     userEmail : string,
@@ -77,6 +78,7 @@ interface PlaneItem {
         planeId: string;
         name: string;
         description: string | null;
+        icon: string;
         lineCount: number;
     }
 }
@@ -104,9 +106,11 @@ function GridPlaneItem({plane}:PlaneItem){
 function ListPlaneItem({plane}:PlaneItem){
     return(
         <Link href={`/plane/${plane.planeId}`}>
-            <div className="w-full flex rounded-sm border h-14 hover:p-0.5 hover:scale-y-105 transition-all bg-muted p-2">
+            <div className="w-full flex rounded-sm border h-14 hover:scale-y-105 transition-all bg-muted p-2">
                 <div className="w-1/2 max-w-full flex items-center gap-4 pl-2">
-                    <span className="w-2 h-2 min-w-2 min-h-2 rounded-full border bg-muted-foreground"/>
+                    <div className="p-2 rounded-full bg-linear-to-br from-muted-foreground to-muted">
+                        <PlaneIcon icon={plane.icon} size={12} />
+                    </div>
                     <div className="flex flex-col gap-1 h-full items-start max-w-full">
                         <h1 className="text-sm truncate">{plane.name}</h1>
                         <h1 className="text-xs truncate text-muted-foreground max-w-full">{plane.description?plane.description:"-"}</h1>
