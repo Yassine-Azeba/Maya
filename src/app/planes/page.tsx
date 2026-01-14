@@ -1,11 +1,42 @@
-
+import Link from "next/link"
+import { GetUser } from "@/data/get/users"
 import { getSession } from "@/lib/nextauth"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import AppSidebar from "@/components/app-sidebar"
+import { AppHeader } from "@/components/app-header"
+import { SidebarInset } from "@/components/ui/sidebar"
+import { PlaneIcon } from "@/components/icon-selector"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { GetPlanesWithLinesCount } from "@/data/get/planes"
+import CreatePlaneButton from "@/data/dialogs/planes/create-dialog"
 
 export default async function Planes() {
     const session = await getSession()
+    const user = await GetUser({email:session?.user?.email!})
+    const planes = await GetPlanesWithLinesCount({userEmail:user.email!})
     return(
-        <div className="flex items-center justify-center h-full w-full">
-            ???
-        </div>
+        <>
+            <AppSidebar planes={planes}/>
+            <SidebarInset className="overflow-x-hidden">
+                <AppHeader />
+                <div className="w-full h-full flex items-center justify-center">
+                    {(planes && planes.length>0)?
+                    <Card className="px-4 py-1">
+                        <ScrollArea className="max-h-72">
+                            <div className="flex flex-col gap-0.5">
+                                {planes.map(plane => <Link key={plane.planeId} href={`/planes/${plane.name}`}>
+                                        <Button variant={"ghost"} className="flex items-center gap-2"><PlaneIcon icon={plane.icon} size={12}/>{plane.name}</Button>
+                                </Link>)}
+                            </div>
+                        </ScrollArea>
+                    </Card>
+                    :
+                    <CreatePlaneButton userEmail={user.email!}>
+                        <Button variant={"outline"}>Create your first plane</Button>
+                    </CreatePlaneButton>}
+                </div>
+            </SidebarInset>
+        </>
     )
 }

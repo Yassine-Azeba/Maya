@@ -4,8 +4,8 @@ import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
-import CreatePlane from "@/data/create/planes"
 import { Button } from "@/components/ui/button"
+import { UpdatePlane } from "@/data/update/planes"
 import { Textarea } from "@/components/ui/textarea"
 import IconSelector from "@/components/icon-selector"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,32 +13,51 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 const formSchema = z.object({
-  name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),
-  description : z.string().max(2000, {error:"You can create as many plane as you want, but 2000 for the description is the limit."})
+  name: z.string()
+    .min(2, {error:"Give your plane a little more space: 2 characters minimum."})
+    .max(255, {error:"This plane name is flying too far — 255 characters is the limit."})
+    .optional(),
+  description : z.string()
+    .max(2000, {error:"You can create as many plane as you want, but 2000 for the description is the limit."})
+    .optional()
 })
 
-interface CreatePlaneFormProps {
-    userEmail: string,
+interface UpdatePlaneFormProps {
+    userEmail : string,
+    plane : { 
+        planeId: string;
+        name: string;
+        description: string | null;
+        icon: string;
+        userId: string;
+    },
     setDialogOpen? : Dispatch<SetStateAction<boolean>>
 }
-export default function CreatePlaneForm({userEmail,setDialogOpen}:CreatePlaneFormProps){
+export default function UpdatePlaneForm({userEmail,plane,setDialogOpen}:UpdatePlaneFormProps){
     const router = useRouter()
-    const [icon, setIcon] = useState("Folder")
+    const [icon, setIcon] = useState(plane.icon)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver : zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            description: ""
+            name: plane.name,
+            description: plane.description??""
         }
     })
-    function onSubmit(values : z.infer<typeof formSchema>){
+    async function onSubmit(values : z.infer<typeof formSchema>){
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(CreatePlane({userEmail:userEmail,name:values.name,description:values.description,icon:icon}),{
+        await toast.promise(
+            UpdatePlane({
+                userEmail:userEmail,
+                planeId : plane.planeId,
+                name:values.name??plane.name,
+                description:values.description??plane.description,
+                icon:icon
+            }),{
             loading: "Loading ...",
-            success: (data) => `${data.message}`,
-            error: (data) => `${data.message}`
+            success: "Plane updated successfully",
+            error: (data) => `${data.message}`,
         })
-        router.refresh()
+        router.push(`/planes/${values.name??plane.name}`)
     }
     return(
         <Form {...form}>
@@ -49,7 +68,7 @@ export default function CreatePlaneForm({userEmail,setDialogOpen}:CreatePlaneFor
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Plane name" {...field}/>
+                                    <Input placeholder={plane.name} {...field}/>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -64,12 +83,12 @@ export default function CreatePlaneForm({userEmail,setDialogOpen}:CreatePlaneFor
                     <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                            <Textarea placeholder="Plane description" {...field}/>
+                            <Textarea placeholder={plane.description??"description"} {...field}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}/>
-                <Button type="submit" className="mt-2">Create</Button>
+                <Button type="submit" className="mt-2">Update</Button>
             </form>
         </Form>
     )

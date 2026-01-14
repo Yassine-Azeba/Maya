@@ -8,7 +8,7 @@ import { AppHeader } from "@/components/app-header"
 import { SidebarInset } from "@/components/ui/sidebar"
 import WorkspaceComponent from "@/components/workspace"
 import { GetPlanesWithLinesCount } from "@/data/get/planes"
-import CreatePlaneButton from "@/data/dialogs/planes/dialog"
+import CreatePlaneButton from "@/data/dialogs/planes/create-dialog"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 
 export default async function Workspace(){

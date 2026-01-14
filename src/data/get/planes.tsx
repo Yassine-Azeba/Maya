@@ -1,10 +1,10 @@
 'use server'
-import { and, eq, sql } from "drizzle-orm"
-import { db } from "@/lib/drizzle"
-import { planes } from "@/db/planes"
-import { DrizzleQueryError } from "drizzle-orm"
 import { GetUser } from "./users"
 import { lines } from "@/db/lines"
+import { db } from "@/lib/drizzle"
+import { planes } from "@/db/planes"
+import { and, eq, sql } from "drizzle-orm"
+import { DrizzleQueryError } from "drizzle-orm"
 
 interface GetPlanesProps {
     name?:string,
@@ -44,13 +44,12 @@ export async function GetPlanesWithLines({name,userEmail}:GetPlanesProps) {
                     eq(planes.name,name),
                     eq(planes.userId,user.id)
                 )
-            ).groupBy(planes.planeId)
+            )
             return result            
         } else {
             const result = await db.select().from(planes)
             .leftJoin(lines, eq(lines.plane,planes.planeId))
             .where(eq(planes.userId,user.id))
-            .groupBy(planes.planeId)
             return result
         }
     } catch (error) {

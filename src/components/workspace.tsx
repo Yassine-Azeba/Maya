@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
-import CreatePlaneButton from "../data/dialogs/planes/dialog"
+import CreatePlaneButton from "../data/dialogs/planes/create-dialog"
 import { HexagonBackground } from "./ui/shadcn-io/hexagon-background"
 import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
 import { PlaneIcon } from "./icon-selector"
@@ -84,7 +84,7 @@ interface PlaneItem {
 }
 function GridPlaneItem({plane}:PlaneItem){
     return(
-        <Link href={`/plane/${plane.planeId}`}>
+        <Link href={`/planes/${plane.name}`}>
             <div className="w-full h-44 p-2 hover:p-0.5 border rounded-md flex flex-col hover:scale-105 transition-all">
                 <div className="w-full h-3/4">
                     <div className="border bg-muted rounded-sm w-full h-full flex items-end justify-start">
@@ -106,7 +106,7 @@ function GridPlaneItem({plane}:PlaneItem){
 }
 function ListPlaneItem({plane}:PlaneItem){
     return(
-        <Link href={`/plane/${plane.planeId}`}>
+        <Link href={`/planes/${plane.name}`}>
             <div className="w-full flex rounded-sm border h-14 hover:scale-y-105 transition-all hover:bg-muted p-2">
                 <div className="w-1/2 max-w-full flex items-center gap-4 pl-2">
                     <div className="p-2 rounded-full bg-muted hover:bg-accent">
