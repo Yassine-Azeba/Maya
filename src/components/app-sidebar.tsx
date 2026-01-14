@@ -4,9 +4,11 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./animate-ui/primitives/radix/collapsible"
-import { BellDot, ChevronRight, ChevronsUpDown, CircleDot, CircleQuestionMark, CircleUserRound, Layers, LayoutDashboard, LogOut, Settings } from "lucide-react"
+import { BellDot, ChevronRight, ChevronsUpDown, CircleDot, CircleQuestionMark, CircleUserRound, Layers, LayersPlus, LayoutDashboard, LogOut, Settings } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./animate-ui/components/radix/dropdown-menu"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./animate-ui/components/radix/sidebar"
+import CreatePlaneButton from "@/data/dialogs/planes/dialog"
+import { Button } from "./ui/button"
 
 interface AppSidebarProps {
     planes? : {
@@ -27,7 +29,7 @@ export default function AppSidebar({planes}:AppSidebarProps){
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size={"lg"}>
-                            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-black dark:bg-white dark:text-black text-white">
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                                 <CircleDot className="size-4" />
                             </div>
                             <span className="truncate font-semibold">Dimensions</span>
@@ -48,6 +50,7 @@ export default function AppSidebar({planes}:AppSidebarProps){
 								</SidebarMenuButton>
 							</Link>
 						</SidebarMenuItem>
+						{(planes && planes?.length>0)?
                         <Collapsible asChild defaultOpen className="group/collapsible">
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
@@ -65,7 +68,8 @@ export default function AppSidebar({planes}:AppSidebarProps){
                                     </SidebarMenuSub>
                                 </CollapsibleContent>
                             </SidebarMenuItem>
-                        </Collapsible>
+                        </Collapsible>:<></>
+						}
                     </SidebarMenu>
                 </SidebarGroup>
                 {/* Settings and Notification */}

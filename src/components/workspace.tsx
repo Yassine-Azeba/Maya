@@ -53,7 +53,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                     )
                 }
                 <CreatePlaneButton userEmail={userEmail}>
-                    <div className="w-full h-44 p-2 hover:p-0.5 border-dashed border rounded-md hover:scale-105 transition-all flex items-center justify-center text-muted-foreground">
+                    <div className="w-full h-44 p-2 hover:p-0.5 border border-dashed hover:border-solid rounded-md hover:scale-105 transition-all flex items-center justify-center">
                         <LayersPlus size={24}/>
                     </div>
                 </CreatePlaneButton>
@@ -64,7 +64,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                     )
                 }
                 <CreatePlaneButton userEmail={userEmail}>
-                    <div className="w-full flex items-center justify-center rounded-sm border border-dashed h-14 hover:p-0.5 hover:scale-y-105 transition-all hover:bg-muted">
+                    <div className="w-full flex items-center justify-center rounded-sm border border-dashed hover:border-solid h-14 hover:p-0.5 hover:scale-y-105 transition-all hover:bg-muted">
                         <LayersPlus size={24}/>
                     </div>
                 </CreatePlaneButton>
@@ -106,10 +106,10 @@ function GridPlaneItem({plane}:PlaneItem){
 function ListPlaneItem({plane}:PlaneItem){
     return(
         <Link href={`/plane/${plane.planeId}`}>
-            <div className="w-full flex rounded-sm border h-14 hover:scale-y-105 transition-all bg-muted p-2">
+            <div className="w-full flex rounded-sm border h-14 hover:scale-y-105 transition-all hover:bg-muted p-2">
                 <div className="w-1/2 max-w-full flex items-center gap-4 pl-2">
-                    <div className="p-2 rounded-full bg-linear-to-br from-muted-foreground to-muted">
-                        <PlaneIcon icon={plane.icon} size={12} />
+                    <div className="p-2 rounded-full bg-muted hover:bg-accent">
+                        <PlaneIcon icon={plane.icon} size={12}/>
                     </div>
                     <div className="flex flex-col gap-1 h-full items-start max-w-full">
                         <h1 className="text-sm truncate">{plane.name}</h1>

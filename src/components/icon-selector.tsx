@@ -36,11 +36,12 @@ export default function IconSelector({icon,setIcon}:IconSelectorProps){
 
 interface PlaneIconProps {
     icon : string
-    size : number
+    size? : number,
+    color? : string
 }
-export function PlaneIcon({icon,size}:PlaneIconProps){
+export function PlaneIcon({icon,size,color}:PlaneIconProps){
     const planeIcon = Icons.filter(ic => ic.label === icon)[0]
     return(
-        <planeIcon.item size={size}/>
+        <planeIcon.item size={size} color={color}/>
     )
 }

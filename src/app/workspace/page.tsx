@@ -5,10 +5,10 @@ import { getSession } from "@/lib/nextauth"
 import { Button } from "@/components/ui/button"
 import AppSidebar from "@/components/app-sidebar"
 import { AppHeader } from "@/components/app-header"
+import { SidebarInset } from "@/components/ui/sidebar"
 import WorkspaceComponent from "@/components/workspace"
 import { GetPlanesWithLinesCount } from "@/data/get/planes"
 import CreatePlaneButton from "@/data/dialogs/planes/dialog"
-import { SidebarInset } from "@/components/ui/sidebar"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 
 export default async function Workspace(){
@@ -25,7 +25,7 @@ export default async function Workspace(){
                     <WorkspaceComponent userEmail={user.email!} planes={planes}/>:
                     <div className="h-full w-full relative antialiased">
                         <div className="w-full h-full flex justify-center items-center flex-col gap-2 relative z-10">
-                            <div className="w-24 h-24 rounded-full border bg-gray-300/35 flex items-center justify-center text-muted-foreground">
+                            <div className="w-24 h-24 rounded-full border flex items-center justify-center text-muted-foreground">
                                 <Layers size={38}/>
                             </div>
                             <h1 className="text-xl">Nothing here yet.</h1>
