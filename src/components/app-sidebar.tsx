@@ -7,8 +7,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./animate-u
 import { BellDot, ChevronRight, ChevronsUpDown, CircleDot, CircleQuestionMark, CircleUserRound, Layers, LayersPlus, LayoutDashboard, LogOut, Settings } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./animate-ui/components/radix/dropdown-menu"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./animate-ui/components/radix/sidebar"
-import CreatePlaneButton from "@/data/dialogs/planes/dialog"
-import { Button } from "./ui/button"
 
 interface AppSidebarProps {
     planes? : {

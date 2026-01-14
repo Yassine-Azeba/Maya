@@ -7,7 +7,6 @@ Book,Notebook,StickyNote,FileText,Clipboard,CheckSquare,ListTodo,Target,
 Rocket,Lightbulb,Sparkles,Flame,TrendingUp,Compass,Map,
 Calendar,Clock,Star,Heart,Shield,Lock} from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { size } from "zod"
 
 
 interface IconSelectorProps {

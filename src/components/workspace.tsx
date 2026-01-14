@@ -86,13 +86,14 @@ function GridPlaneItem({plane}:PlaneItem){
     return(
         <Link href={`/plane/${plane.planeId}`}>
             <div className="w-full h-44 p-2 hover:p-0.5 border rounded-md flex flex-col hover:scale-105 transition-all">
-                <div className="w-full h-3/4 relative">
-                    <HexagonBackground className="border absolute inset-0 rounded-sm w-full h-full flex items-end justify-start" hexagonSize={30}>
-                        <div className="relative z-10 flex flex-col justify-end p-2 max-w-full">
+                <div className="w-full h-3/4">
+                    <div className="border bg-muted rounded-sm w-full h-full flex items-end justify-start">
+                        <div className=" flex flex-col gap-1 justify-end p-2 max-w-full">
+                            <PlaneIcon icon={plane.icon} size={12}/>
                             <h1 className="text-sm truncate">{plane.name}</h1>
                             <h1 className="text-xs truncate text-muted-foreground">{plane.description}</h1>
                         </div>
-                    </HexagonBackground>
+                    </div>
                 </div>
                 <div className="w-full h-1/4 grid grid-cols-3 text-muted-foreground text-xs">
                     <div className="flex items-center justify-center gap-2"><Minus size={12} className="rotate-45" />{plane.lineCount} lines</div>
