@@ -1,7 +1,6 @@
 'use server'
 import { db } from "@/lib/drizzle"
 import { planes } from "@/db/planes"
-import { GetUser } from "../get/users"
 import { GetPlanes } from "../get/planes"
 import { DrizzleQueryError, eq } from "drizzle-orm"
 

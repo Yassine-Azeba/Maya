@@ -12,6 +12,8 @@ import { PlaneTabs } from "@/components/planes"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
 import { Button } from "@/components/animate-ui/components/buttons/button"
 import UpdatePlaneButton from "@/data/dialogs/planes/update-dialog"
+import DeletePlaneButton from "@/data/dialogs/planes/delete-dialog"
+import { Card } from "@/components/ui/card"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -56,13 +58,23 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                             <UpdatePlaneButton userEmail={user.email!} plane={pagePlane}>
                                                 <Button size={"sm"} variant={"secondary"} className="w-full flex items-center gap-2"><Edit size={12} />Edit</Button>
                                             </UpdatePlaneButton>
-                                            <Button size={"sm"} variant={"destructive"} className="flex items-center gap-2"><Trash size={12} />Delete</Button>
+                                            <DeletePlaneButton plane={pagePlane}>
+                                                <Button size={"sm"} variant={"destructive"} className="w-full flex items-center gap-2"><Trash size={12} />Delete</Button>
+                                            </DeletePlaneButton>
                                         </div>
                                     </PopoverContent>
                                 </Popover>
                             </div>
-                            <div className="w-full h-full pt-2">
-                                <PlaneTabs lines={lines} />
+                            <div className="w-full h-full px-4 py-2">
+                                <Card className="w-full h-full">    
+                                    {(lines.length>0)?
+                                        <PlaneTabs lines={lines} />
+                                        :
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <Button>Create your first line.</Button>
+                                        </div>
+                                    }
+                                </Card>
                             </div>
                         </div>
                         :
