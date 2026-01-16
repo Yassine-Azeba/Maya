@@ -2,19 +2,29 @@
 import React, { useState } from "react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
-import UpdatePlaneForm from "@/data/forms/planes/update";
+import CreateLineForm from "@/components/forms/lines/create";
 
-interface UpdatePlaneButtonProps {
-    userEmail : string,
-    plane : { planeId: string;
+interface CreateLineButtonProps {
+    user : {
+        id: string;
+        name: string | null;
+        email: string | null
+    }
+    plane : {
+        planeId : string,
+        name : string
+    },
+    lines: {
+        lineId: string;
         name: string;
         description: string | null;
-        icon: string;
+        parent: string | null;
+        plane: string;
         userId: string;
-    },
+    }[],
     children : React.ReactNode
 }
-export default function UpdatePlaneButton({userEmail,plane,children}:UpdatePlaneButtonProps){
+export default function CreateLineButton({user,plane,lines,children}:CreateLineButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
@@ -24,14 +34,14 @@ export default function UpdatePlaneButton({userEmail,plane,children}:UpdatePlane
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent><p>Update Plane</p></TooltipContent>
+                <TooltipContent><p>Create Line</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>Update Plane</DialogTitle>
+                        <DialogTitle>New Line</DialogTitle>
                     </DialogHeader>
-                    <UpdatePlaneForm plane={plane} userEmail={userEmail} setDialogOpen={setIsOpen}/>
+                    <CreateLineForm user={user} plane={plane} lines={lines} setDialogOpen={setIsOpen}/>
                 </DialogPanel>
             </Dialog>
         </div>

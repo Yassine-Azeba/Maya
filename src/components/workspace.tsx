@@ -4,10 +4,9 @@ import { useState } from "react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
-import CreatePlaneButton from "../data/dialogs/planes/create-dialog"
-import { HexagonBackground } from "./ui/shadcn-io/hexagon-background"
-import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
 import { PlaneIcon } from "./icon-selector"
+import CreatePlaneButton from "./dialogs/planes/create-dialog"
+import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
 
 interface WorkspaceProps {
     userEmail : string,

@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from "react"
+import CreatePlaneForm from "@/components/forms/planes/create"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
-import CreatePlaneForm from "@/data/forms/planes/create"
 
 interface CreatePlaneButtonProps {
     userEmail : string,

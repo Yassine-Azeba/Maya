@@ -11,9 +11,10 @@ import { Edit, EllipsisVertical, Trash } from "lucide-react"
 import { PlaneTabs } from "@/components/planes"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
 import { Button } from "@/components/animate-ui/components/buttons/button"
-import UpdatePlaneButton from "@/data/dialogs/planes/update-dialog"
-import DeletePlaneButton from "@/data/dialogs/planes/delete-dialog"
+import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
+import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
 import { Card } from "@/components/ui/card"
+import CreateLineButton from "@/components/dialogs/lines/create-dialog"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -66,15 +67,23 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                 </Popover>
                             </div>
                             <div className="w-full h-full px-4 py-2">
-                                <Card className="w-full h-full">    
-                                    {(lines.length>0)?
-                                        <PlaneTabs lines={lines} />
-                                        :
+                                {(lines.length>0)?
+                                    <Card className="w-full h-full">
                                         <div className="w-full h-full flex items-center justify-center">
-                                            <Button>Create your first line.</Button>
+                                            <CreateLineButton user={user} plane={pagePlane} lines={lines}>
+                                                <Button>New Line</Button>
+                                            </CreateLineButton>
                                         </div>
-                                    }
-                                </Card>
+                                    </Card>
+                                    :
+                                    <Card className="w-full h-full">
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <CreateLineButton user={user} plane={pagePlane} lines={lines}>
+                                                <Button>Create your first line</Button>
+                                            </CreateLineButton>
+                                        </div>
+                                    </Card>
+                                }
                             </div>
                         </div>
                         :

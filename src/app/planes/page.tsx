@@ -9,7 +9,7 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { PlaneIcon } from "@/components/icon-selector"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { GetPlanesWithLinesCount } from "@/data/get/planes"
-import CreatePlaneButton from "@/data/dialogs/planes/create-dialog"
+import CreatePlaneButton from "@/components/dialogs/planes/create-dialog"
 
 export default async function Planes() {
     const session = await getSession()
