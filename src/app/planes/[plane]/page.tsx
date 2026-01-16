@@ -15,6 +15,7 @@ import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
 import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
 import { Card } from "@/components/ui/card"
 import CreateLineButton from "@/components/dialogs/lines/create-dialog"
+import DeleteLineButton from "@/components/dialogs/lines/delete-dialog"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -59,7 +60,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                             <UpdatePlaneButton userEmail={user.email!} plane={pagePlane}>
                                                 <Button size={"sm"} variant={"secondary"} className="w-full flex items-center gap-2"><Edit size={12} />Edit</Button>
                                             </UpdatePlaneButton>
-                                            <DeletePlaneButton plane={pagePlane}>
+                                            <DeletePlaneButton planeId={pagePlane.planeId}>
                                                 <Button size={"sm"} variant={"destructive"} className="w-full flex items-center gap-2"><Trash size={12} />Delete</Button>
                                             </DeletePlaneButton>
                                         </div>
@@ -68,12 +69,22 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                             </div>
                             <div className="w-full h-full px-4 py-2">
                                 {(lines.length>0)?
-                                    <Card className="w-full h-full">
-                                        <div className="w-full h-full flex items-center justify-center">
-                                            <CreateLineButton user={user} plane={pagePlane} lines={lines}>
-                                                <Button>New Line</Button>
-                                            </CreateLineButton>
-                                        </div>
+                                    <Card className="w-full h-full px-2 py-4">
+                                        {lines.map(line => <div key={line.lineId} className="w-full px-2 py-0.5 bg-accent rounded-md flex justify-between text-sm">
+                                            <div className="flex flex-col gap-0.5">
+                                                <h1>{line.name}</h1>
+                                                <h1 className="text-muted-foreground">{line.description}</h1>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Button variant={"outline"} size={'icon-sm'}><Edit /></Button>
+                                                <DeleteLineButton lineId={line.lineId}>
+                                                    <Button variant={"outline"} size={'icon-sm'}><Trash /></Button>
+                                                </DeleteLineButton>
+                                            </div>
+                                        </div>)}
+                                        <CreateLineButton user={user} plane={pagePlane} lines={lines}>
+                                            <Button className="w-full" variant={"outline"}>New Line</Button>
+                                        </CreateLineButton>
                                     </Card>
                                     :
                                     <Card className="w-full h-full">

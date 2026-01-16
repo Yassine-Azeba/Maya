@@ -3,25 +3,25 @@ import { toast } from "sonner"
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { DeletePlane } from "@/data/delete/planes"
+import { DeleteLine } from "@/data/delete/lines"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
 
-interface DeletePlaneButtonProps {
-    planeId: string,
+interface DeleteLineButtonProps {
+    lineId: string,
     children : React.ReactNode
 }
-export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonProps){
+export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     const router = useRouter()
-    async function onSubmitDeletePlane(planeId : string) {
+    async function onSubmitDeletePlane(lineId : string) {
         setIsOpen(false)
-        await toast.promise(DeletePlane({planeId:planeId}),{
+        await toast.promise(DeleteLine({lineId:lineId}),{
             loading: "Loading ...",
             success: "Plane deleted successfully.",
             error: (data) => `${data.message}`
         })
-        router.push('/workspace')
+        router.refresh()
     }
     return(
         <div>
@@ -31,15 +31,15 @@ export default function DeletePlaneButton({planeId,children}:DeletePlaneButtonPr
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent><p>Delete Plane</p></TooltipContent>
+                <TooltipContent><p>Delete Line</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>Delete Plane</DialogTitle>
-                        <DialogDescription>Are you sure you want to delete this plane ? All children items (lines, views, tools) will be deleted too.</DialogDescription>
+                        <DialogTitle>Delete Line</DialogTitle>
+                        <DialogDescription>Are you sure you want to delete this line ? All children items (lines, views, tools) will be deleted too.</DialogDescription>
                     </DialogHeader>
-                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeletePlane(planeId)}>Delete plane</Button>
+                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeletePlane(lineId)}>Delete plane</Button>
                 </DialogPanel>
             </Dialog>
         </div>
