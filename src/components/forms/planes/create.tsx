@@ -13,8 +13,8 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 const formSchema = z.object({
-  name: z.string().min(2, {error:"Give your plane a little more space: 2 characters minimum."}).max(255, {error:"This plane name is flying too far — 255 characters is the limit."}),
-  description : z.string().max(2000, {error:"You can create as many plane as you want, but 2000 for the description is the limit."})
+  name: z.string().min(2, {error:"2 characters minimum."}).max(255, {error:"255 characters maximum."}),
+  description : z.string().max(2000, {error:"2000 characters maximum."})
 })
 
 interface CreatePlaneFormProps {

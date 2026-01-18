@@ -1,20 +1,23 @@
 'use client'
 import React, { useState } from "react"
-import UpdatePlaneForm from "@/components/forms/planes/update"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
+import UpdateLineForm from "@/components/forms/lines/update";
 
-interface UpdatePlaneButtonProps {
+interface UpdateLineButtonProps {
     userEmail : string,
-    plane : { planeId: string;
+    lineToUpdate : string,
+    lines : {
+        lineId: string;
         name: string;
         description: string | null;
-        icon: string;
+        parent: string | null;
+        plane: string;
         userId: string;
-    },
+    }[],
     children : React.ReactNode
 }
-export default function UpdatePlaneButton({userEmail,plane,children}:UpdatePlaneButtonProps){
+export default function UpdateLineButton({userEmail,lineToUpdate,lines,children}:UpdateLineButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
@@ -24,14 +27,14 @@ export default function UpdatePlaneButton({userEmail,plane,children}:UpdatePlane
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent><p>Update Plane</p></TooltipContent>
+                <TooltipContent><p>Update Line</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>Update Plane</DialogTitle>
+                        <DialogTitle>Update Line</DialogTitle>
                     </DialogHeader>
-                    <UpdatePlaneForm plane={plane} userEmail={userEmail} setDialogOpen={setIsOpen}/>
+                    <UpdateLineForm userEmail={userEmail} lines={lines} lineToUpdate={lineToUpdate}/>
                 </DialogPanel>
             </Dialog>
         </div>

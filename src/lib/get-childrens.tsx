@@ -1,6 +1,7 @@
 
+
 interface GetChildrenProps {
-    firstLineId : string,
+    lineId : string,
     lines : {
         lineId: string;
         name: string;
@@ -10,9 +11,9 @@ interface GetChildrenProps {
         userId: string;
     }[],
 }
-export function GetChildren({firstLineId,lines}:GetChildrenProps){
+export function GetChildren({lineId,lines}:GetChildrenProps){
     var lineChildrenIds : string[] = []
-    var linesToCheck : string[] = [firstLineId]
+    var linesToCheck : string[] = [lineId]
 
     while(linesToCheck.length > 0){
         linesToCheck.map(line => lineChildrenIds.push(line))
@@ -26,20 +27,4 @@ export function GetChildren({firstLineId,lines}:GetChildrenProps){
     }
 
     return lineChildrenIds
-}
-interface RemoveChildrenProps {
-    lineId : string,
-    lines : {
-        lineId: string;
-        name: string;
-        description: string | null;
-        parent: string | null;
-        plane: string;
-        userId: string;
-    }[],
-}
-export function RemoveChildren({lineId, lines}:RemoveChildrenProps){
-    const lineChildrens = GetChildren({firstLineId:lineId,lines:lines})
-    const filteredLines = lines.filter(line => !lineChildrens.includes(line.lineId))
-    return filteredLines
 }

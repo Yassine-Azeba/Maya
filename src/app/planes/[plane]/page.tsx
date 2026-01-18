@@ -16,6 +16,7 @@ import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
 import { Card } from "@/components/ui/card"
 import CreateLineButton from "@/components/dialogs/lines/create-dialog"
 import DeleteLineButton from "@/components/dialogs/lines/delete-dialog"
+import UpdateLineButton from "@/components/dialogs/lines/update-dialog"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -76,7 +77,9 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                                 <h1 className="text-muted-foreground">{line.description}</h1>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <Button variant={"outline"} size={'icon-sm'}><Edit /></Button>
+                                                <UpdateLineButton lines={lines} lineToUpdate={line.lineId} userEmail={user.email!}>
+                                                    <Button variant={"outline"} size={'icon-sm'}><Edit /></Button>
+                                                </UpdateLineButton>
                                                 <DeleteLineButton lineId={line.lineId}>
                                                     <Button variant={"outline"} size={'icon-sm'}><Trash /></Button>
                                                 </DeleteLineButton>
