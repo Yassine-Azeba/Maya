@@ -1,20 +1,14 @@
 'use client'
 import React, { useState } from "react"
-import CreateLineForm from "@/components/forms/lines/create"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
+import CreateCustomAttributForm from "@/components/forms/custom-attributs/create";
 
-interface CreateLineButtonProps {
-    user : {
-        id: string;
-        name: string | null;
-        email: string | null
-    }
-    plane : {
-        planeId : string,
-        name : string
-    },
-    lines: {
+interface CreateCustomAttributsButtonProps {
+    userEmail : string,
+    planeId : string,
+    lineId? : string,
+    lines : {
         lineId: string;
         name: string;
         description: string | null;
@@ -24,7 +18,7 @@ interface CreateLineButtonProps {
     }[],
     children : React.ReactNode
 }
-export default function CreateLineButton({user,plane,lines,children}:CreateLineButtonProps){
+export default function CreateCustomAttributsButton({userEmail,planeId,lines,children}:CreateCustomAttributsButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     return(
         <div>
@@ -34,14 +28,14 @@ export default function CreateLineButton({user,plane,lines,children}:CreateLineB
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent><p>Create Line</p></TooltipContent>
+                <TooltipContent><p>Create Custom Attributs</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>New Line</DialogTitle>
+                        <DialogTitle>New Attribut</DialogTitle>
                     </DialogHeader>
-                    <CreateLineForm user={user} plane={plane} lines={lines} setDialogOpen={setIsOpen}/>
+                    <CreateCustomAttributForm userEmail={userEmail} planeId={planeId} lines={lines} />
                 </DialogPanel>
             </Dialog>
         </div>

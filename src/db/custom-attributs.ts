@@ -17,6 +17,7 @@ export const customAttributs = pgTable("custom_attributs", {
     customAttributId : text("custom_attributs_id").primaryKey().$defaultFn(() => crypto.randomUUID()),
     name : text("name").notNull(),
     type : customAttributTypes(),
+    icon : text("icon").notNull(),
 
     plane : text("plane").references(() => planes.planeId, {onDelete : "cascade"}).notNull(),
     line : text("line").references(() => lines.lineId, {onDelete : "cascade"}),

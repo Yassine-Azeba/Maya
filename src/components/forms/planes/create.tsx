@@ -13,8 +13,8 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 const formSchema = z.object({
-  name: z.string().min(2, {error:"2 characters minimum."}).max(255, {error:"255 characters maximum."}),
-  description : z.string().max(2000, {error:"2000 characters maximum."})
+    name: z.string().min(2, {error:"2 characters minimum."}).max(255, {error:"255 characters maximum."}),
+    description : z.string().max(2000, {error:"2000 characters maximum."})
 })
 
 interface CreatePlaneFormProps {
@@ -57,7 +57,7 @@ export default function CreatePlaneForm({userEmail,setDialogOpen}:CreatePlaneFor
                     </div>
                     <div className="w-1/3 flex flex-col gap-0.5">
                         <h1 className="text-sm font-medium">Icon</h1>
-                        <IconSelector icon={icon} setIcon={setIcon}/>
+                        <IconSelector type="plane" icon={icon} setIcon={setIcon}/>
                     </div>
                 </div>
                 <FormField control={form.control} name="description" render={({field}) => (

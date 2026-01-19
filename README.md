@@ -86,15 +86,6 @@ Each Nest is configured with multiple nested Branches and contains Nodes linked 
     - defaultValue ?
     - validationRules ? => (v2)
 
-TODO : 
-- P0 : Update/Delete Custom Attributs
-- P1 : /data : change returns {success : false} => throw new Error(message) => DONE
-- P2 : handle duplicate lines and duplicate custom attributs
-    - Plane : OK
-    - Lines : Canceled (limits possibilities)
-    - Custom attributs : In Progress
-- P3 : Change /Button folder => /Dialog Folder
-
 Custom Attributs values 
     - Text
     - number

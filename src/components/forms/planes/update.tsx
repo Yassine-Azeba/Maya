@@ -76,7 +76,7 @@ export default function UpdatePlaneForm({userEmail,plane,setDialogOpen}:UpdatePl
                     </div>
                     <div className="w-1/3 flex flex-col gap-0.5">
                         <h1 className="text-sm font-medium">Icon</h1>
-                        <IconSelector icon={icon} setIcon={setIcon}/>
+                        <IconSelector type="plane" icon={icon} setIcon={setIcon}/>
                     </div>
                 </div>
                 <FormField control={form.control} name="description" render={({field}) => (

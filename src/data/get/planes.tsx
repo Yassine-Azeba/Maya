@@ -5,6 +5,7 @@ import { db } from "@/lib/drizzle"
 import { planes } from "@/db/planes"
 import { and, eq, sql } from "drizzle-orm"
 import { DrizzleQueryError } from "drizzle-orm"
+import { customAttributs } from "@/db/custom-attributs"
 
 interface GetPlanesProps {
     name?:string,
@@ -99,4 +100,31 @@ export async function GetPlanesWithLinesCount({name,userEmail}:GetPlanesProps) {
             throw new Error("Unknown error occured. Please try again.")
         }
     }    
+}
+
+export async function GetPlanesWithCustomAttributs({name,userEmail}:GetPlanesProps) {
+    const user = await GetUser({email:userEmail})
+    try{
+        if(name){
+            const result = await db.select().from(planes).leftJoin(customAttributs, eq(customAttributs.plane,planes.planeId))
+            .where(
+                and(
+                    eq(planes.name,name),
+                    eq(planes.userId,user.id)
+                )
+            )
+            return result            
+        } else {
+            const result = await db.select().from(planes)
+            .leftJoin(customAttributs, eq(customAttributs.plane,planes.planeId))
+            .where(eq(planes.userId,user.id))
+            return result
+        }
+    } catch (error) {
+        if(error instanceof DrizzleQueryError){
+            throw new Error(error.message)
+        } else {
+            throw new Error("Unknown error occured. Please try again.")
+        }
+    }  
 }
