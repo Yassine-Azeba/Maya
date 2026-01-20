@@ -49,7 +49,7 @@ function DialogBackdrop<TTag extends React.ElementType = typeof motion.div>({
 }: DialogBackdropProps<TTag>) {
   return (
     <DialogBackdropPrimitive
-      className={cn('fixed inset-0 z-50 bg-black/50', className)}
+      className={cn('fixed inset-0 z-50 bg-black/50 backdrop-blur-sm', className)}
       {...props}
     />
   );

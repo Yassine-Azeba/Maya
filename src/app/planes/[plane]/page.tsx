@@ -1,23 +1,23 @@
 import Link from "next/link"
 import { GetUser } from "@/data/get/users"
 import { getSession } from "@/lib/nextauth"
+import { Card } from "@/components/ui/card"
 import AppSidebar from "@/components/app-sidebar"
 import { AppHeader } from "@/components/app-header"
 import { GetPlanesWithLines } from "@/data/get/planes"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 import { PlaneIcon } from "@/components/icon-selector"
 import { Braces, Edit, EllipsisVertical, Trash } from "lucide-react"
-import { PlaneTabs } from "@/components/planes"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
-import { Button } from "@/components/animate-ui/components/buttons/button"
-import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
-import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
-import { Card } from "@/components/ui/card"
+import { GetUserCustomAttributs } from "@/data/get/custom-attributs"
 import CreateLineButton from "@/components/dialogs/lines/create-dialog"
-import DeleteLineButton from "@/components/dialogs/lines/delete-dialog"
 import UpdateLineButton from "@/components/dialogs/lines/update-dialog"
-import CreateCustomAttributsButton from "@/components/dialogs/attributs/create-dialog"
+import DeleteLineButton from "@/components/dialogs/lines/delete-dialog"
+import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
+import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
+import { Button } from "@/components/animate-ui/components/buttons/button"
+import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
+import CustomAttributsButton from "@/components/dialogs/attributs/create-view-dialog"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -25,6 +25,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const session = await getSession()
     const user = await GetUser({email:session?.user?.email!})
     const planeData = await GetPlanesWithLines({userEmail:user.email!,name:decodedSlug})
+    const customAttributs = await GetUserCustomAttributs({userEmail:session?.user?.email!})
     
     const title = (planeData.length>0)?planeData[0].planes.name:"Not found"
     const pagePlane = (planeData.length>0)?planeData[0].planes:null
@@ -48,11 +49,11 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <CreateCustomAttributsButton userEmail={user.email!} planeId={pagePlane.planeId} lines={lines}>
+                                    <CustomAttributsButton customAttributs={customAttributs} userEmail={user.email!} planeName={pagePlane.name} lines={lines}>
                                         <Button size={"icon-sm"} variant={'outline'}>
                                             <Braces />
                                         </Button>
-                                    </CreateCustomAttributsButton>
+                                    </CustomAttributsButton>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button size={"icon-sm"} variant={'outline'}>

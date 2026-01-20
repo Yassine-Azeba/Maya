@@ -16,7 +16,7 @@ interface CreateCustomAttributsProps {
     requiredForChildren : boolean,
     defaultValue : string
 }
-export default async function CreateCustomAttributs({name,type,icon,appliesForChildren,requiredForChildren,defaultValue,userEmail,planeName,lineId}:CreateCustomAttributsProps) {
+export async function CreateCustomAttributs({name,type,icon,appliesForChildren,requiredForChildren,defaultValue,userEmail,planeName,lineId}:CreateCustomAttributsProps) {
     const user = await GetUser({email:userEmail}) // Check if user exist
     const plane = await GetPlanesWithCustomAttributs({name:planeName,userEmail:userEmail}) // Check if plane exist
     const allCustomAttributs = plane.map(data => data.custom_attributs).filter(data => data !== null)

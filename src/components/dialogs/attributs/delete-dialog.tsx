@@ -3,22 +3,22 @@ import { toast } from "sonner"
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { DeleteLine } from "@/data/delete/lines"
+import { DeleteCustomAttribut } from "@/data/delete/custom-attributs"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
 
-interface DeleteLineButtonProps {
-    lineId: string,
+interface DeleteCustomAttributProps {
+    attributId: string,
     children : React.ReactNode
 }
-export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps){
+export default function DeleteCustomAttributButton({attributId,children}:DeleteCustomAttributProps){
     const [isOpen,setIsOpen] = useState(false)
     const router = useRouter()
-    async function onSubmitDeletePlane(lineId : string) {
+    async function onSubmitDeletePlane(attributId : string) {
         setIsOpen(false)
-        await toast.promise(DeleteLine({lineId:lineId}),{
+        await toast.promise(DeleteCustomAttribut({attributId:attributId}),{
             loading: "Loading ...",
-            success: "Line deleted successfully.",
+            success: "Attribut deleted successfully.",
             error: (data) => `${data.message}`
         })
         router.refresh()
@@ -31,15 +31,15 @@ export default function DeleteLineButton({lineId,children}:DeleteLineButtonProps
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent><p>Delete Line</p></TooltipContent>
+                <TooltipContent><p>Delete Attribut</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <DialogPanel>
                     <DialogHeader>
-                        <DialogTitle>Delete Line</DialogTitle>
-                        <DialogDescription>Are you sure you want to delete this line ? All children items (lines, views, tools) will be deleted too.</DialogDescription>
+                        <DialogTitle>Delete Attribut</DialogTitle>
+                        <DialogDescription>Are you sure you want to delete this attribut ? All values for each lines will be deleted.</DialogDescription>
                     </DialogHeader>
-                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeletePlane(lineId)}>Delete</Button>
+                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeletePlane(attributId)}>Delete</Button>
                 </DialogPanel>
             </Dialog>
         </div>

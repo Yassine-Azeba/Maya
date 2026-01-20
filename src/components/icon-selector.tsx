@@ -18,14 +18,14 @@ const planeIcons = [
     {label: "Clock", item: Clock},{label: "Star", item: Star},{label: "Heart", item: Heart},{label: "Shield", item: Shield},{label: "Lock", item: Lock}
 ]
 const customAttributIcons = [
-    {label: "string", display : "Text", item: TextInitial},
-    {label: "number", display : "Number", item: Sigma},
-    {label: "date", display : "Date", item: Calendar},
-    {label: "boolean", display : "Boolean", item: Binary},
-    {label: "email", display : "Email", item: Mail},
-    {label: "url", display : "Link (url)", item: Link2},
-    {label: "phone", display : "Phone", item: Smartphone},
-    {label: "line", display : "Line", item: Minus},
+    {label: "string", display : "Text", item: TextInitial, stringItem : "TextInitial"},
+    {label: "number", display : "Number", item: Sigma, stringItem : "Sigma"},
+    {label: "date", display : "Date", item: Calendar, stringItem : "Calendar"},
+    {label: "boolean", display : "Boolean", item: Binary, stringItem : "Binary"},
+    {label: "email", display : "Email", item: Mail, stringItem : "Mail"},
+    {label: "url", display : "Link (url)", item: Link2, stringItem : "Link2"},
+    {label: "phone", display : "Phone", item: Smartphone, stringItem : "Smartphone"},
+    {label: "line", display : "Line", item: Minus, stringItem : "Minus"},
 ]
 
 interface IconSelectorProps {
@@ -66,8 +66,8 @@ interface CustomAttributIconProps {
     size? : number,
     color? : string
 }
-export function CustomAttributIcon({icon,size,color}:PlaneIconProps){
-    const customAttributIcon = customAttributIcons.filter(ic => ic.label === icon)[0]
+export function CustomAttributIcon({icon,size,color}:CustomAttributIconProps){
+    const customAttributIcon = customAttributIcons.filter(ic => ic.stringItem === icon)[0]
     return(
         <customAttributIcon.item size={size} color={color}/>
     )
