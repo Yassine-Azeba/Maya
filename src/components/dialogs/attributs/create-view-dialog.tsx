@@ -1,5 +1,5 @@
 'use client'
-import { Eye, Plus, Trash } from "lucide-react"
+import { Edit, Eye, Plus, Trash } from "lucide-react"
 import React, { useState } from "react"
 import DeleteCustomAttributButton from "./delete-dialog"
 import { CustomAttributIcon } from "@/components/icon-selector"
@@ -9,6 +9,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui
 import { Tabs, TabsContent, TabsContents, TabsList, TabsTrigger } from "@/components/animate-ui/components/animate/tabs"
 import { Dialog, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
 import { Button } from "@/components/ui/button"
+import UpdateCustomAttributButton from "@/components/dialogs/attributs/update-button"
+import UpdateCustomAttributForm from "@/components/forms/custom-attributs/update"
 
 interface CreateCustomAttributsButtonProps {
     userEmail : string,
@@ -57,6 +59,7 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                 <DialogTitle className="flex items-center gap-1">
                                     Attributs
                                     <Button size={"icon-sm"} variant={tabValue==="view"?"secondary":"ghost"} onClick={() => setTabValue('view')}><Eye /></Button>
+                                    <Button size={"icon-sm"} variant={tabValue==="update"?"secondary":"ghost"} onClick={() => setTabValue('update')}><Edit /></Button>
                                     <Button size={"icon-sm"} variant={tabValue==="create"?"secondary":"ghost"} onClick={() => setTabValue('create')}><Plus /></Button>
                                 </DialogTitle>
                                 <div className="flex items-center gap-2">
@@ -76,8 +79,9 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                                         <div className="flex flex-col">
                                                             <h1 className="truncate text-sm">{attribut.name}</h1>
                                                             <h1 className="truncate text-xs text-muted-foreground">
-                                                                {attribut.line?`Line : ${lines.filter(l => l.lineId === attribut.line)[0].name}`
-                                                                :`Plane : ${planeName}`}
+                                                                {attribut.defaultValue}
+                                                                {/* {attribut.line?`Line : ${lines.filter(l => l.lineId === attribut.line)[0].name}`
+                                                                :`Plane : ${planeName}`} */}
                                                             </h1>
                                                         </div>
                                                     </div>
@@ -95,6 +99,9 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                                 <h1>No attributs yet.</h1>
                                             </div>}
                                         </div>
+                                </TabsContent>
+                                <TabsContent value="update">
+                                    <UpdateCustomAttributForm userEmail={userEmail} planeName={planeName} attributs={customAttributs} lines={lines}/>
                                 </TabsContent>
                                 <TabsContent value="create">
                                     <CreateCustomAttributForm userEmail={userEmail} planeName={planeName} lineId={lineId} lines={lines} />

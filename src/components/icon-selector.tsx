@@ -1,5 +1,5 @@
 'use client'
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import {
     Binary,Mail,Link2,Smartphone,Minus,
     Calendar,Clock,Star,Heart,Shield,Lock,
@@ -37,12 +37,12 @@ export default function IconSelector({icon,type,setIcon}:IconSelectorProps){
     return(
         <Select value={icon} onValueChange={setIcon}>
             <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select an Icon"/>
+                <SelectValue placeholder="Select an icon"/>
             </SelectTrigger>
             <SelectContent>
                 {(type==="plane")?
-                    planeIcons.map(icon => <SelectItem key={icon.label} value={icon.label} className="flex items-center gap-2"><icon.item />{icon.label}</SelectItem>):
-                    customAttributIcons.map(icon => <SelectItem key={icon.label} value={icon.label} className="flex items-center gap-2"><icon.item />{icon.display}</SelectItem>)
+                    planeIcons.map(i => <SelectItem key={i.label} value={i.label} className="flex items-center gap-2"><i.item />{i.label}</SelectItem>):
+                    customAttributIcons.map(i => <SelectItem key={i.label} value={i.label} className="flex items-center gap-2"><i.item />{i.display}</SelectItem>)
                 }
             </SelectContent>
         </Select>

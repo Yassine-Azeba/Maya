@@ -30,24 +30,19 @@ add drizzle adapter:
 
 # Tools
 ## Planning and Vizualization
-- Kanban
-- Gantt
-- Calendar
-- Dependencies
-- React.Flow view (tree)
+    - Kanban
+    - Gantt
+    - Calendar
+    - Dependencies
+    - React.Flow view (tree)
 ## Clarity and Focus
-- Charts
-- Priorities
-- Risks
-- Dependencies
+    - Charts
+    - Priorities
+    - Risks
+    - Dependencies
 ## Collaboration & Communication (v2)
-- Assignements
-- Mentions
-
-# App description
-Top level container : Space | Plane
-    Classification : object | Line
-        work unit : echo    | Dot
+    - Assignements
+    - Mentions
 
 # Pages
 - Workspace
@@ -63,29 +58,7 @@ Top level container : Space | Plane
 - tools/Assignements
 - tools/mentions
 
-Plane : Project Management
-    Classification : Programms | Projects
-        Dots : NADIN (Programms) | CC Fleet (Programms) | E Invoicing (Projects) | WeFleet (Projects)
-        Classification : Streams (child of programms)
-            Dots : Contremarque (son of NADIN) | Invoicing (son of NADIN) | ...
-            Classification : Tasks
-                Dots : Task 1 (son of CC FLeet) | ...
-
-Description :
-Each Nest is configured with multiple nested Branches and contains Nodes linked by parent-child relationships.
-
 ### Custom attributs
-- string
-- number
-- date
-- boolean
-- hex
-- Metadata : 
-    - applyToChildren ? 
-    - requiredForChildren ? 
-    - defaultValue ?
-    - validationRules ? => (v2)
-
 Custom Attributs values 
     - Text
     - number

@@ -132,7 +132,7 @@ export default function CreateCustomAttributForm({userEmail,planeName,lines,line
                             icon===('email')?<Input disabled={!appliesToChildrens} required={requiredForChildrens} placeholder="@..." type="email" value={defaultValue} onChange={(e) => setDefaultValue(e.target.value)}/>:
                             icon===('url')?<Input disabled={!appliesToChildrens} required={requiredForChildrens} placeholder="https://" value={defaultValue} onChange={(e) => setDefaultValue(e.target.value)}/>:
                             icon===('phone')?<PhoneInput disabled={!appliesToChildrens} value={defaultValue} setValue={setDefaultValue}/>:
-                            icon===('line')?<Select value={defaultValue} onValueChange={setDefaultValue}>
+                            icon===('line')?<Select value={defaultValue} onValueChange={setDefaultValue} disabled={!appliesToChildrens}>
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Line"/>
                                 </SelectTrigger>
