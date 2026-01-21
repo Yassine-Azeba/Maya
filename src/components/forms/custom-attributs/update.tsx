@@ -104,7 +104,7 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
         router.refresh()
     }
     return(
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-sm:w-xs">
             <div className="w-full flex items-center justify-center">
                 <Select value={selectedAttribut} onValueChange={(value) => {
                     const attribut = attributs.filter(a => a.customAttributId === value)[0]
@@ -114,7 +114,7 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
                     setRequiredForChildrens(attribut.requiredForChildrens)
                     setSelectedAttribut(value)
                 }}>
-                    <SelectTrigger className="w-1/3">
+                    <SelectTrigger className="w-1/3 max-sm:w-full">
                         <SelectValue placeholder="Select an attribut to update." />
                     </SelectTrigger>
                     <SelectContent>
@@ -124,8 +124,8 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
             </div>
             {(selectedAttribut !== "")?<Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-                    <div className="flex gap-2">
-                        <div className="w-2/3">
+                    <div className="flex gap-2 max-sm:flex-col">
+                        <div className="w-2/3 max-sm:w-full">
                             <FormField control={form.control} name="name" render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
@@ -136,17 +136,17 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
                                 </FormItem>
                             )}/>
                         </div>
-                        <div className="w-1/3 flex flex-col gap-0.5">
+                        <div className="w-1/3 max-sm:w-full flex flex-col gap-0.5">
                             <h1 className="text-sm font-medium">Icon</h1>
                             <IconSelector type="custom-attribut" icon={icon} setIcon={setIcon}/>
                         </div>
                     </div>
-                    <div className="w-full flex items-center gap-2">
-                        <div className="w-1/2 flex items-center gap-2">
+                    <div className="w-full flex items-center gap-2 max-sm:flex-col">
+                        <div className="w-1/2 max-sm:w-full flex items-center gap-2 max-sm:gap-4">
                             <Switch checked={appliesToChildrens} disabled={requiredForChildrens} onClick={() => setAppliesToChildrens(!appliesToChildrens)}/>
                             Applies to children
                         </div>
-                        <div className="w-1/2 flex items-center gap-2">
+                        <div className="w-1/2 max-sm:w-full flex items-center gap-2 max-sm:gap-4">
                             <Switch checked={requiredForChildrens} onClick={() => {
                                 if(!appliesToChildrens)setAppliesToChildrens(!appliesToChildrens)
                                 setRequiredForChildrens(!requiredForChildrens)

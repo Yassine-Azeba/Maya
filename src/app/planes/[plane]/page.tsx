@@ -38,6 +38,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                 <div className="w-full h-full">
                     {pagePlane && planeData.length>0?
                         <div className="w-full h-full flex flex-col">
+                            {/* Plane information Display */}
                             <div className="flex items-center justify-between py-2 px-4">
                                 <div className="flex items-center gap-4">
                                     <div className="p-2 rounded-full border">
@@ -114,7 +115,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                             <div className="w-full h-full flex justify-center items-center flex-col gap-2 relative z-10">
                                 <h1 className="text-xl">This plane doesn't exist.</h1>
                                 <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                                    <h1>Create the plane in your workspace :</h1>
+                                    <h1>Create new plane in your workspace :</h1>
                                     <Link className="text-orange-400 underline" href={"/workspace"}>/Workspace</Link>
                                 </div>
                             </div>

@@ -53,7 +53,7 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
                 <div className="w-full">
-                    <DialogPanel className={"min-w-4xl max-h-11/12 overflow-auto scrollbar-hide"}>
+                    <DialogPanel className={"sm:min-w-4xl sm:max-h-11/12 w-full overflow-auto scrollbar-hide"}>
                         <Tabs value={tabValue}>
                             <DialogHeader>
                                 <DialogTitle className="flex items-center gap-1">
@@ -62,19 +62,17 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                     <Button size={"icon-sm"} variant={tabValue==="update"?"secondary":"ghost"} onClick={() => setTabValue('update')}><Edit /></Button>
                                     <Button size={"icon-sm"} variant={tabValue==="create"?"secondary":"ghost"} onClick={() => setTabValue('create')}><Plus /></Button>
                                 </DialogTitle>
-                                <div className="flex items-center gap-2">
-                                </div>
                             </DialogHeader>
                             <TabsContents>
                                 <TabsContent value="view">
-                                        <div className="flex flex-col">
+                                        <div className="flex flex-col w-full max-sm:w-max">
                                             {(customAttributs.length>0)?customAttributs.sort((a,b) => { 
                                                 if(a.line === null && b.line !== null) return -1
                                                 if(a.line !== null && b.line === null) return 1
                                                 return 0
                                             }).map(attribut => 
-                                                <div key={attribut.customAttributId} className="p-2 w-full border-b flex items-center justify-between">
-                                                    <div className="w-max flex items-center gap-4">
+                                                <div key={attribut.customAttributId} className="p-2 w-full max-sm:w-xs border-b flex items-center justify-between">
+                                                    <div className="flex items-center gap-4">
                                                         <CustomAttributIcon icon={attribut.icon} size={12}/>
                                                         <div className="flex flex-col">
                                                             <h1 className="truncate text-sm">{attribut.name}</h1>
@@ -86,7 +84,7 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="max-sm:hidden flex items-center gap-2">
                                                             <div className="flex items-center gap-1"><Checkbox size={"sm"} disabled checked={attribut.appliesToChildrens} />Applies to children</div>
                                                             <div className="flex items-center gap-1"><Checkbox size={"sm"} disabled checked={attribut.requiredForChildrens} />Required for children</div>
                                                         </div>
