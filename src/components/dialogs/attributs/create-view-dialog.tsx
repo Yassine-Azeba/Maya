@@ -52,8 +52,8 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                 <TooltipContent><p>Create Attributs</p></TooltipContent>
             </Tooltip>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-                <div className="w-full">
-                    <DialogPanel className={"sm:min-w-4xl sm:max-h-11/12 w-full overflow-auto scrollbar-hide"}>
+                <div>
+                    <DialogPanel className={"sm:min-w-4xl w-full max-h-11/12 overflow-auto scrollbar-hide"}>
                         <Tabs value={tabValue}>
                             <DialogHeader>
                                 <DialogTitle className="flex items-center gap-1">
@@ -65,21 +65,19 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                             </DialogHeader>
                             <TabsContents>
                                 <TabsContent value="view">
-                                        <div className="flex flex-col w-full max-sm:w-max">
+                                        <div className="flex flex-col max-sm:w-xs">
                                             {(customAttributs.length>0)?customAttributs.sort((a,b) => { 
                                                 if(a.line === null && b.line !== null) return -1
                                                 if(a.line !== null && b.line === null) return 1
                                                 return 0
                                             }).map(attribut => 
-                                                <div key={attribut.customAttributId} className="p-2 w-full max-sm:w-xs border-b flex items-center justify-between">
+                                                <div key={attribut.customAttributId} className="p-2 w-full border-b flex items-center justify-between">
                                                     <div className="flex items-center gap-4">
                                                         <CustomAttributIcon icon={attribut.icon} size={12}/>
                                                         <div className="flex flex-col">
                                                             <h1 className="truncate text-sm">{attribut.name}</h1>
                                                             <h1 className="truncate text-xs text-muted-foreground">
                                                                 {attribut.defaultValue}
-                                                                {/* {attribut.line?`Line : ${lines.filter(l => l.lineId === attribut.line)[0].name}`
-                                                                :`Plane : ${planeName}`} */}
                                                             </h1>
                                                         </div>
                                                     </div>

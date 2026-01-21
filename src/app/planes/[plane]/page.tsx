@@ -80,7 +80,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                             </div>
                             <div className="w-full h-full px-4 py-2">
                                 {(lines.length>0)?
-                                    <Card className="w-full h-full px-2 py-4">
+                                    <Card className="w-full h-full px-2 py-4 overflow-y-auto overflow-x-hidden">
                                         {lines.map(line => <div key={line.lineId} className="w-full px-2 py-0.5 bg-accent rounded-md flex justify-between text-sm">
                                             <div className="flex flex-col gap-0.5">
                                                 <h1>{line.name}</h1>

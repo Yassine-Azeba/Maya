@@ -15,6 +15,7 @@ import IconSelector, { CustomAttributIcon } from "@/components/icon-selector"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { UpdateCustomAttributs } from "@/data/update/custom-attributs"
+import { Separator } from "@/components/ui/separator"
 
 const formSchema = z.object({
     name: z.string().max(255, {error:"255 characters maximum."}).optional(),
@@ -122,6 +123,7 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
                     </SelectContent>
                 </Select>
             </div>
+            <Separator />
             {(selectedAttribut !== "")?<Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <div className="flex gap-2 max-sm:flex-col">
