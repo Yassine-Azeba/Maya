@@ -87,3 +87,6 @@ Features to come :
         - Alert
         - Rules (validationRules : Custom Attributs)
         - Automation rules (cron ...)
+
+Exemple :
+- Hotel Guest list

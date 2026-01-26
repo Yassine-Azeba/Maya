@@ -31,6 +31,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                         <Input
                             placeholder="Search..."
                             className="pl-10"
+                            type="search"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             />

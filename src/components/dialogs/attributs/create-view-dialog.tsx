@@ -63,9 +63,9 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                     <Button size={"icon-sm"} variant={tabValue==="create"?"secondary":"ghost"} onClick={() => setTabValue('create')}><Plus /></Button>
                                 </DialogTitle>
                             </DialogHeader>
-                            <TabsContents>
+                            <TabsContents className="max-w-3xl max-sm:w-xs">
                                 <TabsContent value="view">
-                                        <div className="flex flex-col max-sm:w-xs">
+                                        <div className="flex flex-col">
                                             {(customAttributs.length>0)?customAttributs.sort((a,b) => { 
                                                 if(a.line === null && b.line !== null) return -1
                                                 if(a.line !== null && b.line === null) return 1
@@ -74,7 +74,7 @@ export default function CustomAttributsButton({userEmail,planeName,lineId,lines,
                                                 <div key={attribut.customAttributId} className="p-2 w-full border-b flex items-center justify-between">
                                                     <div className="flex items-center gap-4">
                                                         <CustomAttributIcon icon={attribut.icon} size={12}/>
-                                                        <div className="flex flex-col">
+                                                        <div className="flex flex-col min-w-0">
                                                             <h1 className="truncate text-sm">{attribut.name}</h1>
                                                             <h1 className="truncate text-xs text-muted-foreground">
                                                                 {attribut.defaultValue}

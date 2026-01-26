@@ -9,15 +9,14 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { PlaneIcon } from "@/components/icon-selector"
 import { Braces, Edit, EllipsisVertical, Trash } from "lucide-react"
 import { GetUserCustomAttributs } from "@/data/get/custom-attributs"
-import CreateLineButton from "@/components/dialogs/lines/create-dialog"
-import UpdateLineButton from "@/components/dialogs/lines/update-dialog"
-import DeleteLineButton from "@/components/dialogs/lines/delete-dialog"
 import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
 import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
 import { Button } from "@/components/animate-ui/components/buttons/button"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 import CustomAttributsButton from "@/components/dialogs/attributs/create-view-dialog"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
+import { Separator } from "@/components/ui/separator"
+import LineTable from "@/components/line-table"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -78,37 +77,8 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                     </Popover>
                                 </div>
                             </div>
-                            <div className="w-full h-full px-4 py-2">
-                                {(lines.length>0)?
-                                    <Card className="w-full h-full px-2 py-4 overflow-y-auto overflow-x-hidden">
-                                        {lines.map(line => <div key={line.lineId} className="w-full px-2 py-0.5 bg-accent rounded-md flex justify-between text-sm">
-                                            <div className="flex flex-col gap-0.5">
-                                                <h1>{line.name}</h1>
-                                                <h1 className="text-muted-foreground">{line.description}</h1>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <UpdateLineButton lines={lines} lineToUpdate={line.lineId} userEmail={user.email!}>
-                                                    <Button variant={"outline"} size={'icon-sm'}><Edit /></Button>
-                                                </UpdateLineButton>
-                                                <DeleteLineButton lineId={line.lineId}>
-                                                    <Button variant={"outline"} size={'icon-sm'}><Trash /></Button>
-                                                </DeleteLineButton>
-                                            </div>
-                                        </div>)}
-                                        <CreateLineButton user={user} plane={pagePlane} lines={lines}>
-                                            <Button className="w-full" variant={"outline"}>New Line</Button>
-                                        </CreateLineButton>
-                                    </Card>
-                                    :
-                                    <Card className="w-full h-full">
-                                        <div className="w-full h-full flex items-center justify-center">
-                                            <CreateLineButton user={user} plane={pagePlane} lines={lines}>
-                                                <Button>Create your first line</Button>
-                                            </CreateLineButton>
-                                        </div>
-                                    </Card>
-                                }
-                            </div>
+                            <Separator />
+                            <LineTable user={user} plane={pagePlane} lines={lines} attributs={customAttributs}/>
                         </div>
                         :
                         <div className="h-full w-full relative antialiased">

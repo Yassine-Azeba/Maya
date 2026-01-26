@@ -87,7 +87,7 @@ export default function CreateCustomAttributForm({userEmail,planeName,lines,line
     }
     return(
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 max-sm:w-xs">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <div className="flex gap-2 max-sm:flex-col">
                     <div className="w-2/3 max-sm:w-full">
                         <FormField control={form.control} name="name" render={({field}) => (

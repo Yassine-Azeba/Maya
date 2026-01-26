@@ -105,7 +105,7 @@ export default function UpdateCustomAttributForm({userEmail,planeName,attributs,
         router.refresh()
     }
     return(
-        <div className="flex flex-col gap-2 max-sm:w-xs">
+        <div className="flex flex-col gap-2">
             <div className="w-full flex items-center justify-center">
                 <Select value={selectedAttribut} onValueChange={(value) => {
                     const attribut = attributs.filter(a => a.customAttributId === value)[0]
