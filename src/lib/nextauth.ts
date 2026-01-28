@@ -1,4 +1,4 @@
-import { db } from '../db/schema'
+import { db } from '../db/schema/schema'
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import GoogleProvider from "next-auth/providers/google"
 import { AuthOptions, getServerSession } from "next-auth"

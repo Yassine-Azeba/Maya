@@ -1,22 +1,20 @@
 import Link from "next/link"
 import { GetUser } from "@/data/get/users"
 import { getSession } from "@/lib/nextauth"
-import { Card } from "@/components/ui/card"
-import AppSidebar from "@/components/app-sidebar"
-import { AppHeader } from "@/components/app-header"
+import LineTable from "@/components/line-table"
+import AppSidebar from "@/components/layout/app-sidebar"
+import { AppHeader } from "@/components/layout/app-header"
+import { Separator } from "@/components/ui/separator"
 import { GetPlanesWithLines } from "@/data/get/planes"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { PlaneIcon } from "@/components/icon-selector"
 import { Braces, Edit, EllipsisVertical, Trash } from "lucide-react"
-import { GetUserCustomAttributs } from "@/data/get/custom-attributs"
+import { GetUserCustomAttributs } from "@/data/get/attributs"
 import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
 import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
 import { Button } from "@/components/animate-ui/components/buttons/button"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
-import CustomAttributsButton from "@/components/dialogs/attributs/create-view-dialog"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
-import { Separator } from "@/components/ui/separator"
-import LineTable from "@/components/line-table"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
@@ -48,34 +46,27 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                         <h1 className="text-sm text-muted-foreground">{pagePlane.description}</h1>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <CustomAttributsButton customAttributs={customAttributs} userEmail={user.email!} planeName={pagePlane.name} lines={lines}>
+                                <Popover>
+                                    <PopoverTrigger asChild>
                                         <Button size={"icon-sm"} variant={'outline'}>
-                                            <Braces />
+                                            <EllipsisVertical/>
                                         </Button>
-                                    </CustomAttributsButton>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button size={"icon-sm"} variant={'outline'}>
-                                                <EllipsisVertical/>
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <div className="flex flex-col gap-2 w-full">
-                                                <div className="flex flex-col gap-1">
-                                                    <h1 className="text-sm">Edit your plane</h1>
-                                                    <h1 className="text-xs text-muted-foreground">Update the plane name, description or icon.</h1>
-                                                </div>
-                                                <UpdatePlaneButton userEmail={user.email!} plane={pagePlane}>
-                                                    <Button size={"sm"} variant={"secondary"} className="w-full flex items-center gap-2"><Edit size={12} />Edit</Button>
-                                                </UpdatePlaneButton>
-                                                <DeletePlaneButton planeId={pagePlane.planeId}>
-                                                    <Button size={"sm"} variant={"destructive"} className="w-full flex items-center gap-2"><Trash size={12} />Delete</Button>
-                                                </DeletePlaneButton>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <div className="flex flex-col gap-2 w-full">
+                                            <div className="flex flex-col gap-1">
+                                                <h1 className="text-sm">Edit your plane</h1>
+                                                <h1 className="text-xs text-muted-foreground">Update the plane name, description or icon.</h1>
                                             </div>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
+                                            <UpdatePlaneButton userEmail={user.email!} plane={pagePlane}>
+                                                <Button size={"sm"} variant={"secondary"} className="w-full flex items-center gap-2"><Edit size={12} />Edit</Button>
+                                            </UpdatePlaneButton>
+                                            <DeletePlaneButton planeId={pagePlane.planeId}>
+                                                <Button size={"sm"} variant={"destructive"} className="w-full flex items-center gap-2"><Trash size={12} />Delete</Button>
+                                            </DeletePlaneButton>
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                             <Separator />
                             <LineTable user={user} plane={pagePlane} lines={lines} attributs={customAttributs}/>

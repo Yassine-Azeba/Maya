@@ -2,13 +2,15 @@
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
-import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react"
 import { CustomAttributIcon } from "./icon-selector"
 import CreateLineButton from "./dialogs/lines/create-dialog"
 import { Checkbox } from "./animate-ui/components/radix/checkbox"
+import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "./animate-ui/components/radix/popover"
-import { Braces, Check, ChevronDown, ChevronRight, Filter, SearchIcon, SquarePlus } from "lucide-react"
-
+import { Braces, Check, ChevronDown, ChevronRight, Edit, Filter, SearchIcon, SquarePlus, Trash } from "lucide-react"
+import CreateAttributButton from "./dialogs/attributs/create-dialog"
+import UpdateAttributButton from "./dialogs/attributs/update-button"
+import DeleteAttributButton from "./dialogs/attributs/delete-dialog"
 
 interface LineTableProps {
     user : {
@@ -29,23 +31,18 @@ interface LineTableProps {
         userId: string;
     }[],
     attributs : {
-        customAttributId: string;
+        attributId: string;
         name: string;
-        type: "string" | "number" | "boolean" | "date" | "email" | "url" | "phone" | "line" | null;
-        icon: string;
+        type: "Text" | "Number" | "Date" | "Email" | "Link" | "Phone" | "Line" | "Selection";
         plane: string;
-        line: string | null;
         userId: string;
-        appliesToChildrens: boolean;
-        requiredForChildrens: boolean;
-        defaultValue: string | null;
     }[]
 }
 export default function LineTable({user,plane,lines,attributs}:LineTableProps){
     const isSyncing = useRef(false)
     const [search,setSearch] = useState<string>("")
     const refs = useRef<Map<string, HTMLDivElement>>(new Map())
-    const [selectedAttributs,setAttribut] = useState<string[]>(attributs.slice(0,3).map(v => v.customAttributId))
+    const [selectedAttributs,setAttribut] = useState<string[]>(attributs.slice(0,3).map(v => v.attributId))
     const [selectedLines,setSelectedLines] = useState<string[]>([])
     const filteredLines = lines.filter(l => l.name.includes(search))
     
@@ -78,22 +75,36 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                             <div className="flex flex-col gap-2 w-full">
                                 <h1>Attributs</h1>
                                 <Separator />
-                                {(attributs.length>0)?attributs.map(attribut => <div 
-                                key={attribut.customAttributId} 
-                                onClick={() => setAttribut(prev => 
-                                    prev.includes(attribut.customAttributId)
-                                        ? prev.filter(v => v!== attribut.customAttributId)
-                                        : [...prev,attribut.customAttributId]
-                                )}
-                                className={`flex items-center justify-between gap-2 rounded-sm cursor-pointer hover:bg-muted ${selectedAttributs.includes(attribut.customAttributId)?"bg-muted":""} px-2 py-0.5`}>
-                                    <div className="flex min-w-0 items-center gap-2">
-                                        <CustomAttributIcon icon={attribut.icon} size={12}/>
-                                        <h1 className="min-w-0 max-w-max truncate">{attribut.name}</h1>
+                                {(attributs.length>0)?attributs.map(attribut => 
+                                <div className="flex items-center gap-0.5" key={attribut.attributId}>
+                                    <div 
+                                    onClick={() => setAttribut(prev => 
+                                        prev.includes(attribut.attributId)
+                                            ? prev.filter(v => v!== attribut.attributId)
+                                            : [...prev,attribut.attributId]
+                                    )}
+                                    className={`w-full h-7 flex items-center justify-between gap-2 rounded-sm cursor-pointer hover:bg-muted ${selectedAttributs.includes(attribut.attributId)?"bg-muted":""} px-2 py-0.5 text-sm`}>
+                                        <div className="flex min-w-0 items-center gap-2">
+                                            <CustomAttributIcon icon={attribut.type} size={12}/>
+                                            <h1 className="min-w-0 max-w-max truncate">{attribut.name}</h1>
+                                        </div>
+                                        <div className={`${selectedAttributs.includes(attribut.attributId)?"":"hidden"}`}>
+                                            <Check size={12}/>
+                                        </div>
                                     </div>
-                                    <div className={`${selectedAttributs.includes(attribut.customAttributId)?"":"hidden"}`}>
-                                        <Check size={12}/>
-                                    </div>
+                                    <UpdateAttributButton userEmail={user.email!} planeName={plane.name} attribut={attribut}>
+                                        <Button variant={"ghost"} size={"icon-sm"} className="size-7"><Edit size={10}/></Button>
+                                    </UpdateAttributButton>
+                                    <DeleteAttributButton attributId={attribut.attributId}>
+                                        <Button variant={"ghost"} size={"icon-sm"} className="size-7"><Trash size={10}/></Button>
+                                    </DeleteAttributButton>
                                 </div>):<div>No attributs created.</div>}
+                                <CreateAttributButton userEmail={user.email!} planeName={plane.name} >
+                                    <div className="w-full flex items-center justify-center gap-2 h-7 rounded-sm cursor-pointer hover:bg-muted border border-dashed hover:border-solid text-sm">
+                                        <SquarePlus size={12}/>
+                                        Create attribut
+                                    </div>
+                                </CreateAttributButton>
                             </div>
                         </PopoverContent>
                     </Popover>
@@ -130,9 +141,9 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                 <div className="min-w-44 max-w-44 text-sm font-semibold"><h1>Name</h1></div>
                 <div className="min-w-56 max-w-56 text-sm font-semibold"><h1>Description</h1></div>
                 {selectedAttributs.map(col => {
-                    const attribut = attributs.filter(a => a.customAttributId === col)[0]
+                    const attribut = attributs.filter(a => a.attributId === col)[0]
                     return (<div key={col} className="min-w-44 max-w-44 flex text-sm font-semibold text-ellipsis items-center gap-1">
-                        <div className="min-w-4"><CustomAttributIcon icon={attribut.icon} size={10}/></div>
+                        <div className="min-w-4"><CustomAttributIcon icon={attribut.type} size={10}/></div>
                         <h1 className="truncate">{attribut.name}</h1>
                     </div>)
                 })}
@@ -179,16 +190,11 @@ interface LineItemProps {
         userId: string;
     }[], 
     attributs : {
-        customAttributId: string;
+        attributId: string;
         name: string;
-        type: "string" | "number" | "boolean" | "line" | "date" | "email" | "url" | "phone" | null;
-        icon: string;
+        type: "Text" | "Number" | "Date" | "Email" | "Link" | "Phone" | "Line" | "Selection";
         plane: string;
-        line: string | null;
         userId: string;
-        appliesToChildrens: boolean;
-        requiredForChildrens: boolean;
-        defaultValue: string | null;
     }[],
     showChildren : boolean,
     selectedAttributs: string[],
@@ -234,7 +240,7 @@ function LineItem({isChild,showChildren,line,lines,attributs,selectedAttributs,s
                 </div>
                 <div className="min-w-56 max-w-56 text-sm font-semibold"><h1 className="truncate">{line.description}</h1></div>
                 {selectedAttributs.map(col => {
-                    const attribut = attributs.filter(a => a.customAttributId === col)[0]
+                    const attribut = attributs.filter(a => a.attributId === col)[0]
                     return (<div key={col} className="min-w-44 max-w-44 flex text-sm font-semibold items-center gap-1 truncate">
                         <h1>-</h1>
                     </div>)
