@@ -5,9 +5,11 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
 import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
+import { PlaneIcon } from "@/features/planes/planes-icons"
+import { CreatePlaneButton } from "@/features/planes/planes-dialogs"
 
 interface WorkspaceProps {
-    userEmail : string,
+    userId : string,
     planes: {
         planeId: string;
         name: string;
@@ -16,7 +18,7 @@ interface WorkspaceProps {
         userId: string;
     }[]
 }
-export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
+export default function WorkspaceComponent({userId,planes}:WorkspaceProps){
     const [view,setView] = useState<"list"|"grid">("grid")
     const [search,setSearch] = useState<string>("")
     const filteredPlanes = planes.filter(plane => plane.name.includes(search))
@@ -38,7 +40,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                 <div className="flex gap-2">
                     <Button variant={view==="grid"?"secondary":"ghost"} size={"sm"} className="flex items-center gap-2 text-xs" onClick={() => setView("grid")}><Grid size={12}/>Grid view</Button>
                     <Button variant={view==="list"?"secondary":"ghost"} size={"sm"} className="flex items-center gap-2 text-xs" onClick={() => setView("list")}><List size={12}/>List view</Button>
-                    <CreatePlaneButton userEmail={userEmail}>
+                    <CreatePlaneButton userId={userId} >
                         <Button variant={"outline"} size={"sm"} className="flex items-center text-xs"><CirclePlus />New Plane</Button>
                     </CreatePlaneButton>
                 </div>
@@ -50,7 +52,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                     planes.map(plane => <GridPlaneItem key={plane.planeId} plane={plane}/>
                     )
                 }
-                <CreatePlaneButton userEmail={userEmail}>
+                <CreatePlaneButton userId={userId} >
                     <div className="w-full h-44 p-2 hover:p-0.5 border border-dashed hover:border-solid rounded-md hover:scale-105 transition-all flex items-center justify-center">
                         <LayersPlus size={24}/>
                     </div>
@@ -61,7 +63,7 @@ export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){
                     planes.map(plane => <ListPlaneItem key={plane.planeId} plane={plane}/>
                     )
                 }
-                <CreatePlaneButton userEmail={userEmail}>
+                <CreatePlaneButton userId={userId} >
                     <div className="w-full flex items-center justify-center rounded-sm border border-dashed hover:border-solid h-14 hover:p-0.5 hover:scale-y-105 transition-all hover:bg-muted">
                         <LayersPlus size={24}/>
                     </div>
@@ -77,7 +79,7 @@ interface PlaneItem {
         name: string;
         description: string | null;
         icon: string;
-        lineCount: number;
+        userId: string;
     }
 }
 function GridPlaneItem({plane}:PlaneItem){
@@ -94,9 +96,9 @@ function GridPlaneItem({plane}:PlaneItem){
                     </div>
                 </div>
                 <div className="w-full h-1/4 grid grid-cols-3 text-muted-foreground text-xs">
-                    <div className="flex items-center justify-center gap-2"><Minus size={12} className="rotate-45" />{plane.lineCount} lines</div>
-                    <div className="flex items-center justify-center gap-2"><Component size={12} />12 views</div>
-                    <div className="flex items-center justify-center gap-2"><Brackets size={12} />4 attributs</div>
+                    <div className="flex items-center justify-center gap-2"><Minus size={12} className="rotate-45" />0 lines</div>
+                    <div className="flex items-center justify-center gap-2"><Component size={12} />0 views</div>
+                    <div className="flex items-center justify-center gap-2"><Brackets size={12} />0 attributs</div>
                 </div>
             </div>
         </Link>
@@ -116,11 +118,11 @@ function ListPlaneItem({plane}:PlaneItem){
                     </div>
                 </div>
                 <Separator orientation="vertical" className="max-sm:hidden"/>
-                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Minus size={12} className="rotate-45" />{plane.lineCount} lines</div>
+                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Minus size={12} className="rotate-45" />0 lines</div>
                 <Separator orientation="vertical" className="max-sm:hidden"/>
-                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Component size={12} />12 views</div>
+                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Component size={12} />0 views</div>
                 <Separator orientation="vertical" className="max-sm:hidden"/>
-                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Brackets size={12} />4 attributs</div>
+                <div className="w-1/6 flex items-center justify-center gap-2 text-muted-foreground text-xs max-sm:hidden"><Brackets size={12} />0 attributs</div>
             </div>
         </Link>
     )

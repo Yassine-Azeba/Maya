@@ -22,8 +22,9 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const session = await getSession()
     const user = await GetUserByEmail({email:session?.user?.email!})
     const planeData = await GetPlaneByName({planeName:decodedSlug,userId:user.id})
-    const lines = await GetPlaneLines({planeId:planeData[0].planeId})
-    const attributs = await GetPlaneAttributs({planeId:planeData[0].planeId})
+    const planeId = (planeData.length>0)?planeData[0].planeId:""
+    const lines = await GetPlaneLines({planeId:planeId})
+    const attributs = await GetPlaneAttributs({planeId:planeId})
     
     const title = (planeData.length>0)?planeData[0].name:"Not found"
     const pagePlane = (planeData.length>0)?planeData[0]:null
@@ -69,7 +70,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                 </Popover>
                             </div>
                             <Separator />
-                            {/* <LineTable user={user} plane={pagePlane} lines={lines} attributs={customAttributs}/> */}
+                            <LineTable user={user} plane={pagePlane} lines={lines} attributs={attributs}/>
                         </div>
                         :
                         <div className="h-full w-full relative antialiased">

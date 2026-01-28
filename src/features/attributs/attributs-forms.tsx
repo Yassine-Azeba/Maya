@@ -27,13 +27,13 @@ export function CreateAttributForm({userId,planeId,setDialogOpen}:CreateAttribut
         resolver : zodResolver(createAttributSchema),
         defaultValues: { 
             name: "",
-            type : "Text",
+            type : type,
             selectionValues : []
         }
     })
-    function onSubmit(values : z.infer<typeof createAttributSchema>){
+    async function onSubmit(values : z.infer<typeof createAttributSchema>){
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(CreateAttribut({
+        await toast.promise(CreateAttribut({
             name : values.name,
             type : values.type,
             planeId : planeId,
@@ -62,7 +62,7 @@ export function CreateAttributForm({userId,planeId,setDialogOpen}:CreateAttribut
                         )}/>
                     </div>
                     <div className="w-1/3 max-sm:w-full flex flex-col gap-0.5">
-                        <h1 className="text-sm font-medium">Icon</h1>
+                        <h1 className="text-sm font-medium">{type}</h1>
                         <AttributIconSelector type={type} setType={setType} />
                     </div>
                 </div>
@@ -114,12 +114,12 @@ export function UpdateAttributForm({attributToUpdate,setDialogOpen}:UpdateAttrib
             selectionValues : attributToUpdate.selectionValues??[]
         }
     })
-    function onSubmit(values : z.infer<typeof updateAttributSchema>){
+    async function onSubmit(values : z.infer<typeof updateAttributSchema>){
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(UpdateAttribut({
+        await toast.promise(UpdateAttribut({
             attributId : attributToUpdate.attributId,
-            name : values.name,
-            type : values.type,
+            name : values.name??attributToUpdate.name,
+            type : values.type??attributToUpdate.type,
             selectionValues : selectValues
         }),{
             loading: "Loading ...",

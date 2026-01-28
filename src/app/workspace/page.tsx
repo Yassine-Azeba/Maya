@@ -22,7 +22,7 @@ export default async function Workspace(){
                 <AppHeader />
                 <div className="w-full h-full">
                     {(planes && planes.length>0)?
-                    <WorkspaceComponent userEmail={user.email!} planes={planes}/>:
+                    <WorkspaceComponent userId={user.id} planes={planes}/>:
                     <div className="h-full w-full relative antialiased">
                         <div className="w-full h-full flex justify-center items-center flex-col gap-2 relative z-10">
                             <div className="w-24 h-24 rounded-full border flex items-center justify-center text-muted-foreground">

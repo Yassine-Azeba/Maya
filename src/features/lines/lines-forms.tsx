@@ -35,12 +35,12 @@ export function CreateLineForm({userId,planeId,lines,setDialogOpen}:CreateLineFo
         defaultValues: {
             name: "",
             description: "",
-            parentLineId : ""
+            parentLineId : undefined
         }
     })
     async function onSubmit(values:z.infer<typeof createLineSchema>) {
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(CreateLine({
+        await toast.promise(CreateLine({
             name : values.name,
             description : values.description,
             planeId : planeId,
@@ -125,7 +125,7 @@ export function UpdateLineForm({lineToUpdate,lines,setDialogOpen}:UpdateLineForm
     })
     async function onSubmit(values:z.infer<typeof updateLineSchema>) {
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(UpdateLine({
+        await toast.promise(UpdateLine({
             lineId : lineToUpdate.lineId,
             name : values.name??lineToUpdate.name,
             parentLineId : parent ?? lineToUpdate.parent,

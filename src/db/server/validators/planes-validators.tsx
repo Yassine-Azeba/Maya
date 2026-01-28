@@ -18,5 +18,5 @@ export const createPlaneSchema = z.object({
 export const updatePlaneSchema = z.object({
     name: z.string().max(255, {error:"255 characters maximum."}).optional(),
     description : z.string().max(2000, {error:"2000 characters maximum."}).optional(),
-    icon : z.enum(PlaneIcons)
+    icon : z.enum(PlaneIcons).optional()
 })

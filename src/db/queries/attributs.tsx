@@ -78,7 +78,7 @@ interface UpdateAttributProps {
 export async function UpdateAttribut({attributId,name,type,selectionValues}:UpdateAttributProps){
     const attribut = await GetAttributById({attributId:attributId}) // check if attribut exist
     if(name){
-        const isNameUnique = await IsAttributNameUnique({name:name,planeId:attribut[0].plane}) // Check duplicates
+        const isNameUnique = await IsAttributNameUnique({name:name,planeId:attribut[0].plane,attributId:attributId}) // Check duplicates
         if(isNameUnique === false) throw new Error('Another attribut holds this name.')
     }
     try {

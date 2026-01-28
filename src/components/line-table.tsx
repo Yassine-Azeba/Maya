@@ -2,15 +2,13 @@
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
-import { CustomAttributIcon } from "./icon-selector"
-import CreateLineButton from "./dialogs/lines/create-dialog"
 import { Checkbox } from "./animate-ui/components/radix/checkbox"
 import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "./animate-ui/components/radix/popover"
 import { Braces, Check, ChevronDown, ChevronRight, Edit, Filter, SearchIcon, SquarePlus, Trash } from "lucide-react"
-import CreateAttributButton from "./dialogs/attributs/create-dialog"
-import UpdateAttributButton from "./dialogs/attributs/update-button"
-import DeleteAttributButton from "./dialogs/attributs/delete-dialog"
+import { CreateAttributButton, DeleteAttributButton, UpdateAttributButton } from "@/features/attributs/attributs-dialog"
+import { AttributType } from "@/features/attributs/attributs-icons"
+import { CreateLineButton } from "@/features/lines/lines-dialogs"
 
 interface LineTableProps {
     user : {
@@ -36,6 +34,7 @@ interface LineTableProps {
         type: "Text" | "Number" | "Date" | "Email" | "Link" | "Phone" | "Line" | "Selection";
         plane: string;
         userId: string;
+        selectionValues: string[] | null;
     }[]
 }
 export default function LineTable({user,plane,lines,attributs}:LineTableProps){
@@ -85,21 +84,21 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                                     )}
                                     className={`w-full h-7 flex items-center justify-between gap-2 rounded-sm cursor-pointer hover:bg-muted ${selectedAttributs.includes(attribut.attributId)?"bg-muted":""} px-2 py-0.5 text-sm`}>
                                         <div className="flex min-w-0 items-center gap-2">
-                                            <CustomAttributIcon icon={attribut.type} size={12}/>
+                                            <AttributType type={attribut.type} size={12}/>
                                             <h1 className="min-w-0 max-w-max truncate">{attribut.name}</h1>
                                         </div>
                                         <div className={`${selectedAttributs.includes(attribut.attributId)?"":"hidden"}`}>
                                             <Check size={12}/>
                                         </div>
                                     </div>
-                                    <UpdateAttributButton userEmail={user.email!} planeName={plane.name} attribut={attribut}>
+                                    <UpdateAttributButton attributToUpdate={attribut}>
                                         <Button variant={"ghost"} size={"icon-sm"} className="size-7"><Edit size={10}/></Button>
                                     </UpdateAttributButton>
                                     <DeleteAttributButton attributId={attribut.attributId}>
                                         <Button variant={"ghost"} size={"icon-sm"} className="size-7"><Trash size={10}/></Button>
                                     </DeleteAttributButton>
                                 </div>):<div>No attributs created.</div>}
-                                <CreateAttributButton userEmail={user.email!} planeName={plane.name} >
+                                <CreateAttributButton userId={user.id} planeId={plane.planeId} >
                                     <div className="w-full flex items-center justify-center gap-2 h-7 rounded-sm cursor-pointer hover:bg-muted border border-dashed hover:border-solid text-sm">
                                         <SquarePlus size={12}/>
                                         Create attribut
@@ -114,7 +113,7 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                         <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input className="pl-10" placeholder="Search..." type="search" value={search} onChange={(e) => setSearch(e.target.value)}/>
                     </div>
-                    <CreateLineButton user={user} plane={plane} lines={lines}>
+                    <CreateLineButton userId={user.id} planeId={plane.planeId} lines={lines}>
                         <Button size={"sm"} className="flex items-center gap-2"><SquarePlus size={12}/>New Line</Button>
                     </CreateLineButton>
                 </div>
@@ -143,7 +142,7 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                 {selectedAttributs.map(col => {
                     const attribut = attributs.filter(a => a.attributId === col)[0]
                     return (<div key={col} className="min-w-44 max-w-44 flex text-sm font-semibold text-ellipsis items-center gap-1">
-                        <div className="min-w-4"><CustomAttributIcon icon={attribut.type} size={10}/></div>
+                        <div className="min-w-4"><AttributType type={attribut.type} size={10}/></div>
                         <h1 className="truncate">{attribut.name}</h1>
                     </div>)
                 })}

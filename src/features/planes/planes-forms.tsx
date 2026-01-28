@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Dispatch, SetStateAction, useState } from "react"
 import { createPlaneSchema, updatePlaneSchema } from "@/db/server/validators/planes-validators"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { setTimeout } from "timers/promises"
 
 interface CreatePlaneFormProps {
     userId: string,
@@ -28,9 +29,9 @@ export function CreatePlaneForm({userId,setDialogOpen}:CreatePlaneFormProps){
             icon: "Folder"
         }
     })
-    function onSubmit(values : z.infer<typeof createPlaneSchema>){
+    async function onSubmit(values : z.infer<typeof createPlaneSchema>){
         if(setDialogOpen){setDialogOpen(false)}
-        toast.promise(CreatePlane({userId:userId,name:values.name,description:values.description,icon:icon}),{
+        await toast.promise(CreatePlane({userId:userId,name:values.name,description:values.description,icon:icon}),{
             loading: "Loading ...",
             success: "Plane created successfully",
             error: (data) => `${data.message}`
