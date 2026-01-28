@@ -1,32 +1,32 @@
 import Link from "next/link"
-import { GetUser } from "@/data/get/users"
 import { getSession } from "@/lib/nextauth"
 import LineTable from "@/components/line-table"
 import AppSidebar from "@/components/layout/app-sidebar"
 import { AppHeader } from "@/components/layout/app-header"
 import { Separator } from "@/components/ui/separator"
-import { GetPlanesWithLines } from "@/data/get/planes"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { PlaneIcon } from "@/components/icon-selector"
 import { Braces, Edit, EllipsisVertical, Trash } from "lucide-react"
-import { GetUserCustomAttributs } from "@/data/get/attributs"
-import DeletePlaneButton from "@/components/dialogs/planes/delete-dialog"
-import UpdatePlaneButton from "@/components/dialogs/planes/update-dialog"
 import { Button } from "@/components/animate-ui/components/buttons/button"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/animate-ui/components/radix/popover"
+import { GetUserByEmail } from "@/db/queries/user"
+import { GetPlaneByName } from "@/db/queries/planes"
+import { GetPlaneLines } from "@/db/queries/lines"
+import { GetPlaneAttributs } from "@/db/queries/attributs"
+import { PlaneIcon } from "@/features/planes/planes-icons"
+import { DeletePlaneButton, UpdatePlaneButton } from "@/features/planes/planes-dialogs"
 
 export default async function Plane({params}:{params:Promise<{plane:string}>}) {
     const {plane} = await params
     const decodedSlug = decodeURIComponent(plane)
     const session = await getSession()
-    const user = await GetUser({email:session?.user?.email!})
-    const planeData = await GetPlanesWithLines({userEmail:user.email!,name:decodedSlug})
-    const customAttributs = await GetUserCustomAttributs({userEmail:session?.user?.email!})
+    const user = await GetUserByEmail({email:session?.user?.email!})
+    const planeData = await GetPlaneByName({planeName:decodedSlug,userId:user.id})
+    const lines = await GetPlaneLines({planeId:planeData[0].planeId})
+    const attributs = await GetPlaneAttributs({planeId:planeData[0].planeId})
     
-    const title = (planeData.length>0)?planeData[0].planes.name:"Not found"
-    const pagePlane = (planeData.length>0)?planeData[0].planes:null
-    const lines = planeData.map(data => data.lines).filter(line => line !== null)
+    const title = (planeData.length>0)?planeData[0].name:"Not found"
+    const pagePlane = (planeData.length>0)?planeData[0]:null
     return(
         <>
             <AppSidebar />
@@ -58,7 +58,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                                 <h1 className="text-sm">Edit your plane</h1>
                                                 <h1 className="text-xs text-muted-foreground">Update the plane name, description or icon.</h1>
                                             </div>
-                                            <UpdatePlaneButton userEmail={user.email!} plane={pagePlane}>
+                                            <UpdatePlaneButton planeToUpdate={pagePlane}>
                                                 <Button size={"sm"} variant={"secondary"} className="w-full flex items-center gap-2"><Edit size={12} />Edit</Button>
                                             </UpdatePlaneButton>
                                             <DeletePlaneButton planeId={pagePlane.planeId}>
@@ -69,7 +69,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
                                 </Popover>
                             </div>
                             <Separator />
-                            <LineTable user={user} plane={pagePlane} lines={lines} attributs={customAttributs}/>
+                            {/* <LineTable user={user} plane={pagePlane} lines={lines} attributs={customAttributs}/> */}
                         </div>
                         :
                         <div className="h-full w-full relative antialiased">

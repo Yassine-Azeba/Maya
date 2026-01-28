@@ -4,8 +4,6 @@ import { useState } from "react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Separator } from "../ui/separator"
-import { PlaneIcon } from "../icon-selector"
-import CreatePlaneButton from "./dialogs/planes/create-dialog"
 import { Brackets, CirclePlus, Component, Grid, LayersPlus, List, Minus, SearchIcon } from "lucide-react"
 
 interface WorkspaceProps {
@@ -15,7 +13,7 @@ interface WorkspaceProps {
         name: string;
         description: string | null;
         icon: string;
-        lineCount: number;
+        userId: string;
     }[]
 }
 export default function WorkspaceComponent({userEmail,planes}:WorkspaceProps){

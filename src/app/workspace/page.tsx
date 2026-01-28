@@ -1,20 +1,20 @@
 import Link from "next/link"
 import { Layers } from "lucide-react"
-import { GetUser } from "@/data/get/users"
 import { getSession } from "@/lib/nextauth"
 import { Button } from "@/components/ui/button"
 import AppSidebar from "@/components/layout/app-sidebar"
 import { AppHeader } from "@/components/layout/app-header"
 import { SidebarInset } from "@/components/ui/sidebar"
 import WorkspaceComponent from "@/components/layout/workspace"
-import { GetPlanesWithLinesCount } from "@/data/get/planes"
-import CreatePlaneButton from "@/components/dialogs/planes/create-dialog"
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams"
+import { GetUserByEmail } from "@/db/queries/user"
+import { GetUserPlanes } from "@/db/queries/planes"
+import { CreatePlaneButton } from "@/features/planes/planes-dialogs"
 
 export default async function Workspace(){
     const session = await getSession()
-    const user = await GetUser({email:session?.user?.email!})
-    const planes = await GetPlanesWithLinesCount({userEmail:user.email!})
+    const user = await GetUserByEmail({email:session?.user?.email!})
+    const planes = await GetUserPlanes({userId:user.id})
     return(
         <>
             <AppSidebar planes={planes}/>
@@ -35,7 +35,7 @@ export default async function Workspace(){
                                 <Link className="text-orange-400 underline" href={"/help"}>/help</Link>
                                 <h1>page if you feel lost.</h1>
                             </div> 
-                            <CreatePlaneButton userEmail={user.email!}>
+                            <CreatePlaneButton userId={user.id}>
                                 <Button variant={"outline"}>Create your first plane</Button>
                             </CreatePlaneButton>
                         </div>

@@ -9,12 +9,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "../animate-ui/components/radix/sidebar"
 
 interface AppSidebarProps {
-    planes? : {
+		planes? : {
 		planeId: string;
 		name: string;
 		description: string | null;
 		icon: string;
-		lineCount: number;
+		userId: string;
 	}[]
 }
 export default function AppSidebar({planes}:AppSidebarProps){

@@ -1,6 +1,6 @@
 'use server'
 import { db } from ".."
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { GetUserById } from "./user"
 import { planes } from "../schema/planes"
 import { DrizzleQueryError } from "drizzle-orm"
@@ -29,6 +29,28 @@ interface GetPlaneByIdProps {
 export async function GetPlaneById({planeId}:GetPlaneByIdProps) {
     try{
         const result = await db.select().from(planes).where(eq(planes.planeId,planeId))
+        return result
+    } catch (error) {
+        if(error instanceof DrizzleQueryError){
+            throw new Error(error.message)
+        } else {
+            throw new Error("Unknown error occured. Please try again.")
+        }
+    }
+}
+
+interface GetPlaneByNameProps {
+    planeName : string,
+    userId : string
+}
+export async function GetPlaneByName({planeName,userId}:GetPlaneByNameProps) {
+    try{
+        const result = await db.select().from(planes).where(
+            and(
+                eq(planes.name,planeName),
+                eq(planes.userId,userId)
+            )
+        )
         return result
     } catch (error) {
         if(error instanceof DrizzleQueryError){
