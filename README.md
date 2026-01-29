@@ -1,3 +1,7 @@
+# TODO :
+- Select not working (attribut type selection and line parent selection)
+- flawed logic for server action : refresh page after server action is not good
+
 # Setup
 npx create-next-app@latest
 npx shadcn@latest init

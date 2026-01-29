@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { CreateAttribut, UpdateAttribut } from "@/db/queries/attributs"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { createAttributSchema, updateAttributSchema } from "@/db/server/validators/attributs-validators"
+import { Badge } from "@/components/ui/badge"
 
 interface CreateAttributFormProps {
     userId : string,
@@ -35,7 +36,7 @@ export function CreateAttributForm({userId,planeId,setDialogOpen}:CreateAttribut
         if(setDialogOpen){setDialogOpen(false)}
         await toast.promise(CreateAttribut({
             name : values.name,
-            type : values.type,
+            type : type,
             planeId : planeId,
             userId : userId,
             selectionValues : selectValues
@@ -70,17 +71,22 @@ export function CreateAttributForm({userId,planeId,setDialogOpen}:CreateAttribut
                 <div className="flex flex-col gap-1">
                     <h1>Selection Values</h1>
                     <div className="flex gap-2 items-center">
-                        <div className="w-4/5">
+                        <div className="w-full">
                             <Input placeholder="value" 
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}/>
                         </div>
-                        <div className="w-1/5">
-                            <Button variant={"outline"} size={"icon-sm"} onClick={() => 
+                        <div>
+                            <Button type="button" variant={"outline"} size={"icon-sm"} onClick={() => 
                                 setSelectValues(prev => prev.includes(inputValue)?prev:[...prev,inputValue])}>
                                     <Plus />
                             </Button>
                         </div>
+                    </div>
+                    <div className="max-w-full grid grid-flow-row auto-rows-auto gap-1">
+                        {selectValues.map(val => 
+                            <Badge key={val} className="text-xs">{val}</Badge>
+                        )}
                     </div>
                 </div>
                 :<></>}
@@ -119,7 +125,7 @@ export function UpdateAttributForm({attributToUpdate,setDialogOpen}:UpdateAttrib
         await toast.promise(UpdateAttribut({
             attributId : attributToUpdate.attributId,
             name : values.name??attributToUpdate.name,
-            type : values.type??attributToUpdate.type,
+            type : type,
             selectionValues : selectValues
         }),{
             loading: "Loading ...",

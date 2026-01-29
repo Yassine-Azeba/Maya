@@ -97,7 +97,7 @@ interface UpdatePlaneProps {
 export async function UpdatePlane({planeId,name,icon,description}:UpdatePlaneProps) {
     const plane = await GetPlaneById({planeId:planeId}) // Check if plane exist
     if(name){
-        const isNameUnique = await IsPlaneNameUnique({name:name,userId:plane[0].userId}) // Check duplicates
+        const isNameUnique = await IsPlaneNameUnique({name:name,userId:plane[0].userId,planeId:planeId}) // Check duplicates
         if(isNameUnique === false) throw new Error('Another plane holds this name.')
     }
     try {
