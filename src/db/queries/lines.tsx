@@ -1,6 +1,6 @@
 'use server'
 import { db } from ".."
-import { eq } from "drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
 import { GetUserById } from "./user"
 import { GetPlaneById } from "./planes"
 import { lines } from "../schema/lines"
@@ -121,12 +121,12 @@ export async function UpdateLine({lineId,name,description,parentLineId}:UpdateLi
     }
 }
 
-interface DeleteLineProps {
-    lineId : string
+interface DeleteLinesProps {
+    linesId : string[]
 }
-export async function DeleteLine({lineId}:DeleteLineProps) {
+export async function DeleteLines({linesId}:DeleteLinesProps) {
     try {
-        const result = await db.delete(lines).where(eq(lines.lineId,lineId)).returning()
+        const result = await db.delete(lines).where(inArray(lines.lineId,linesId)).returning()
         return result
     } catch (error) {
         if(error instanceof DrizzleQueryError){
@@ -134,5 +134,5 @@ export async function DeleteLine({lineId}:DeleteLineProps) {
         } else {
             throw new Error("Unknown error occured. Please try again.")
         }
-    }
+    }    
 }

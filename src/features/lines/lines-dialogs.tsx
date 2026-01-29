@@ -3,7 +3,7 @@ import { toast } from "sonner"
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { DeleteLine } from "@/db/queries/lines"
+import { DeleteLines } from "@/db/queries/lines"
 import { CreateLineForm, UpdateLineForm } from "./lines-forms"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/animate-ui/components/animate/tooltip"
 import { Dialog, DialogDescription, DialogHeader, DialogPanel, DialogTitle } from "@/components/animate-ui/components/headless/dialog"
@@ -88,18 +88,18 @@ export function UpdateLineButton({lineToUpdate,lines,children}:UpdateLineButtonP
     )
 }
 
-interface DeleteLineButtonProps {
-    lineId: string,
+interface DeleteLinesButtonProps {
+    linesId: string[],
     children : React.ReactNode
 }
-export function DeleteLineButton({lineId,children}:DeleteLineButtonProps){
+export function DeleteLinesButton({linesId,children}:DeleteLinesButtonProps){
     const [isOpen,setIsOpen] = useState(false)
     const router = useRouter()
-    async function onSubmitDeleteLine(lineId : string) {
+    async function onSubmitDeleteLine(linesId : string[]) {
         setIsOpen(false)
-        await toast.promise(DeleteLine({lineId:lineId}),{
+        await toast.promise(DeleteLines({linesId:linesId}),{
             loading: "Loading ...",
-            success: "Line deleted successfully.",
+            success: "Line(s) deleted successfully.",
             error: (data) => `${data.message}`
         })
         router.refresh()
@@ -118,9 +118,9 @@ export function DeleteLineButton({lineId,children}:DeleteLineButtonProps){
                 <DialogPanel>
                     <DialogHeader>
                         <DialogTitle>Delete Line</DialogTitle>
-                        <DialogDescription>Are you sure you want to delete this line ? All children items (lines, views, tools) will be deleted too.</DialogDescription>
+                        <DialogDescription>Are you sure you want to delete these line ? All children items (lines, views, tools) will be deleted too.</DialogDescription>
                     </DialogHeader>
-                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeleteLine(lineId)}>Delete</Button>
+                    <Button variant={"destructive"} size={"sm"} onClick={() => onSubmitDeleteLine(linesId)}>Delete</Button>
                 </DialogPanel>
             </Dialog>
         </div>

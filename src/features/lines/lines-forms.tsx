@@ -45,7 +45,7 @@ export function CreateLineForm({userId,planeId,lines,setDialogOpen}:CreateLineFo
             description : values.description,
             planeId : planeId,
             userId : userId,
-            parentLineId : values.parentLineId
+            parentLineId : parent
         }),{
             loading : "Loading ...",
             success : "Line created successfully",

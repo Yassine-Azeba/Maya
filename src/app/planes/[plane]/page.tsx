@@ -33,7 +33,7 @@ export default async function Plane({params}:{params:Promise<{plane:string}>}) {
             <AppSidebar />
             <SidebarInset className="overflow-x-hidden">
                 <AppHeader title={title} />
-                <div className="w-full h-full">
+                <div className="relative w-full h-full">
                     {pagePlane && planeData.length>0?
                         <div className="w-full h-full flex flex-col">
                             {/* Plane information Display */}

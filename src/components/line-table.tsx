@@ -9,6 +9,7 @@ import { Braces, Check, ChevronDown, ChevronRight, Edit, Filter, SearchIcon, Squ
 import { CreateAttributButton, DeleteAttributButton, UpdateAttributButton } from "@/features/attributs/attributs-dialog"
 import { AttributType } from "@/features/attributs/attributs-icons"
 import { CreateLineButton } from "@/features/lines/lines-dialogs"
+import Dock from "./dock"
 
 interface LineTableProps {
     user : {
@@ -62,6 +63,8 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
     }
 
     return(
+        <>
+        <Dock selectedLines={selectedLines} lines={lines}/>
         <div className="flex flex-col gap-2 py-2 px-4">
             <div className="w-full flex items-center justify-between">
                 <div className="flex items-center gap-2 max-sm:hidden">
@@ -167,6 +170,7 @@ export default function LineTable({user,plane,lines,attributs}:LineTableProps){
                 }
             </div>
         </div>
+        </>
     )
 }
 

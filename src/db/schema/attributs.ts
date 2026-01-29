@@ -30,5 +30,5 @@ export const attributValues = pgTable("attributs_values",{
     attribut : text("attributs_id").references(() => attributs.attributId, {onDelete : "cascade"}).notNull(),
     line : text("line").references(() => lines.lineId, {onDelete : "cascade"}).notNull(),
 
-    value : text("value").array()
+    value : text("value")
 })
